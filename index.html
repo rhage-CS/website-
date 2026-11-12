@@ -69,6 +69,10 @@
   .milestones li { padding-left:18px; position:relative; color:var(--muted); font-size:.93rem; }
   .milestones li::before { content:""; position:absolute; left:0; top:.55em; width:8px; height:8px; border-radius:50%; background:var(--accent2); }
   .milestones strong { color:var(--text); font-weight:600; }
+
+  .to-top { position:fixed; right:22px; bottom:22px; width:46px; height:46px; border-radius:50%; background:var(--accent); color:#111; display:flex; align-items:center; justify-content:center; font-size:1.3rem; font-weight:700; box-shadow:0 6px 20px rgba(0,0,0,.4); opacity:0; pointer-events:none; transition:opacity .25s; z-index:20; }
+  .to-top.show { opacity:1; pointer-events:auto; }
+  .to-top:hover { text-decoration:none; filter:brightness(1.1); }
   section { padding:70px 0; border-top:1px solid var(--line); }
 
   /* Project cards */
@@ -100,12 +104,13 @@
   footer { border-top:1px solid var(--line); padding:30px 0; color:var(--muted); font-size:.9rem; }
 </style>
 </head>
-<body>
+<body id="top">
 
 <nav>
   <div class="wrap">
-    <a class="brand" href="#">Roman Hage</a>
+    <a class="brand" href="#top">Roman Hage</a>
     <ul>
+      <li><a href="#top">Home</a></li>
       <li><a href="#sound">Sound Design</a></li>
       <li><a href="#motion">Animation &amp; MoCap</a></li>
       <li><a href="#games">Game Projects</a></li>
@@ -266,12 +271,6 @@
             <div class="role">Level Designer · 3-person team · 5-week sprint</div>
             <h3>Final Transmission</h3>
             <p>A 3D walking simulator where I owned the level's spatial layout and flow, from first sketch to in-engine implementation.</p>
-            <ul class="milestones">
-              <li><strong>Planning:</strong> mocked up layouts in Photoshop and modeled the level in Maya to align the team before building</li>
-              <li><strong>Guiding without markers:</strong> shaped the player's route, sightlines and pacing through terrain and building placement, with no waypoints</li>
-              <li><strong>Core objective:</strong> designed the lighthouse lighting mechanic, placed so it reads as a landmark from across the map</li>
-              <li><strong>Playtest iteration:</strong> adjusted spacing and routing where players got lost or where the walk between beats felt empty</li>
-            </ul>
             <div class="tags"><span class="tag">Level Design</span><span class="tag">Maya</span><span class="tag">Photoshop</span><span class="tag">Playtesting</span></div>
           </div>
         </div>
@@ -298,7 +297,7 @@
   <div class="wrap cols">
     <div>
       <div class="eyebrow">About</div>
-      <h2>Hi, I'm Roman.</h2>
+      <h2>Experience</h2>
       <div class="job"><div class="when">2026 – present</div><h3>Assistant MoCap Engineer · LEMI Lab, UCSC</h3></div>
       <div class="job"><div class="when">2026 – present</div><h3>Game AI Research Assistant · Augmented Design Lab</h3></div>
       <div class="job"><div class="when">2023 – 2025</div><h3>Game Audio Designer · Dead End Studios</h3></div>
@@ -333,7 +332,10 @@
   <div class="wrap">© 2026 Roman Hage · Sound Design &amp; Animation</div>
 </footer>
 
+<a href="#top" class="to-top" aria-label="Back to top">↑</a>
 <script>
+const tt=document.querySelector(".to-top");
+addEventListener("scroll",()=>tt.classList.toggle("show",scrollY>600));
 document.querySelectorAll('[data-gallery]').forEach(g => {
   const main = g.querySelector('.gallery-main img');
   const cap = g.querySelector('.gallery-cap');
