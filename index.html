@@ -399,7 +399,7 @@ section h2.glitch{position:relative}
           <div class="role">Godot · Jev · Laya · Prompt Engineering</div>
           <h3>NPC Personalities in a Colony Sim</h3>
           <p class="hook">Testing whether AI characters with different personalities make different choices in the same situation.</p>
-          <p>I drafted the game's design spec: a top-down Godot survival game where characters manage health and hunger, gather resources, craft tools and survive nightly monsters, with every character controlled by Jev, an AI model from TypeSpace AI. As the team's prompt engineer, I write and test the personality prompts that drive each character's decisions and compare how they behave in the same scenarios. I also run benchmark and open-ended sessions with Jev and record its decisions, which we use to train Laya, a smaller model.</p>
+          <p>I drafted the game's design spec: a top-down Godot survival game where characters manage health and hunger, gather resources, craft tools and survive nightly monsters, with every character controlled by Jev, an AI model from TypeSafe AI. As the team's prompt engineer, I write and test the personality prompts that drive each character's decisions and compare how they behave in the same scenarios. I also run benchmark and open-ended sessions with Jev and record its decisions, which we use to train Laya, a smaller model.</p>
           <div class="tags"><span class="tag">Godot</span><span class="tag">LLM Agents</span><span class="tag">Prompt Engineering</span><span class="tag">Benchmarking</span><span class="tag">Jev</span><span class="tag">Laya Training</span></div>
           <div class="actions"><a class="btn" href="https://github.com/CMPM118-Jev-Team/Survivaler-Gameler" target="_blank" rel="noopener">View code</a></div>
         </div>
@@ -410,9 +410,10 @@ section h2.glitch{position:relative}
           <span class="status past">Past probe</span>
           <div class="role">Jev · Prompt Engineering</div>
           <h3>AI Pac-Man Player</h3>
-          <p class="hook">Testing whether Jev can play Pac-Man as well as a standard game AI.</p>
-          <p>I connected the Jev API to our team's Pac-Man prototype in my own test build. I experimented with different ways of describing the game state in prompts and with having Jev give high-level goals that a script turns into movement. I found that Jev couldn't judge danger, such as telling a ghost behind a wall from one two tiles away, which led the team to move to the colony sim.</p>
+          <p class="hook">Testing how well Jev, TypeSafe AI's game-playing model, can play Pac-Man.</p>
+          <p>I took an open-source HTML5 Pac-Man remake with our team's AI-agent setup and switched its controller over to Jev's cloud API. I then ran Jev through live games and tested how it played, experimenting with how the game state is described in its prompts. Testing showed that Jev couldn't judge danger, such as telling a ghost behind a wall from one two tiles away, which led the team to move to the colony sim.</p>
           <div class="tags"><span class="tag">Jev</span><span class="tag">Prompt Engineering</span></div>
+          <div class="actions"><a class="btn" href="https://github.com/rhage-CS/Jev-API-PacMan-test" target="_blank" rel="noopener">View code</a></div>
         </div>
       </div>
 
