@@ -93,6 +93,9 @@
   .links { list-style:none; padding:0; display:grid; gap:10px; max-width:500px; }
   .links a { display:block; padding:14px 18px; border:1px solid var(--line); border-radius:10px; background:var(--card); color:var(--text); }
   .links a:hover { border-color:var(--accent); text-decoration:none; }
+  .links a { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  .link-label { color:var(--muted); }
+  .link-value { color:var(--accent); font-weight:600; word-break:break-all; }
 
   footer { border-top:1px solid var(--line); padding:30px 0; color:var(--muted); font-size:.9rem; }
 </style>
@@ -259,13 +262,21 @@
           </div>
         </div>
       </div>
-      <div class="card">
-        <div class="media">Final Transmission video (add embed)</div>
-        <div class="body">
-          <div class="role">Level Designer · 3-person team · 5 weeks</div>
-          <h3>Final Transmission</h3>
-          <p>A 3D walking simulator. I designed the level, mocked up layouts in Photoshop, and modeled it in Maya.</p>
-          <div class="tags"><span class="tag">Level Design</span><span class="tag">Maya</span><span class="tag">Photoshop</span></div>
+      <div class="card feature" id="final-transmission">
+        <div class="feature-top">
+          <div class="media"><iframe src="https://www.loom.com/embed/6b57e1e1b4df4c7cb69b907d11781668" title="Final Transmission walkthrough" allowfullscreen loading="lazy"></iframe></div>
+          <div class="body">
+            <div class="role">Level Designer · 3-person team · 5-week sprint</div>
+            <h3>Final Transmission</h3>
+            <p>A 3D walking simulator where I owned the level's spatial layout and flow, from first sketch to in-engine implementation.</p>
+            <ul class="milestones">
+              <li><strong>Planning:</strong> mocked up layouts in Photoshop and modeled the level in Maya to align the team before building</li>
+              <li><strong>Guiding without markers:</strong> shaped the player's route, sightlines and pacing through terrain and building placement, with no waypoints</li>
+              <li><strong>Core objective:</strong> designed the lighthouse lighting mechanic, placed so it reads as a landmark from across the map</li>
+              <li><strong>Playtest iteration:</strong> adjusted spacing and routing where players got lost or where the walk between beats felt empty</li>
+            </ul>
+            <div class="tags"><span class="tag">Level Design</span><span class="tag">Maya</span><span class="tag">Photoshop</span><span class="tag">Playtesting</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -301,7 +312,8 @@
       <h3>Tools</h3>
       <div class="tags"><span class="tag">FMOD</span><span class="tag">Pro Tools</span><span class="tag">Reaper</span><span class="tag">Unity</span><span class="tag">Unreal</span><span class="tag">Maya</span><span class="tag">Blender</span><span class="tag">OptiTrack</span><span class="tag">Motive</span></div>
       <h3 style="margin-top:24px">Education</h3>
-      <p class="muted">B.S. Computer Science: Computer Game Design, UC Santa Cruz (expected 2027)<br>A.A.S. Computer Science, Cañada College</p>
+      <div class="job"><div class="when">Sept 2025 – Dec 2027 (expected)</div><h3>B.S. Computer Science: Computer Game Design</h3><p class="muted" style="margin:0">University of California, Santa Cruz</p></div>
+      <div class="job"><div class="when">Aug 2022 – May 2025</div><h3>A.S. Computer Science</h3><p class="muted" style="margin:0">Cañada College, Redwood City</p></div>
     </div>
   </div>
 </section>
@@ -313,10 +325,9 @@
     <h2>Let's work together.</h2>
     <p class="muted">I'm open to sound design, game audio, animation and mocap roles, internships and collaborations.</p>
     <ul class="links">
-      <li><a href="mailto:YOUR_EMAIL_HERE">Email</a></li>
-      <li><a href="https://www.linkedin.com/in/roman-hage" target="_blank">LinkedIn</a></li>
-      <li><a href="https://github.com/rhage-CS" target="_blank">GitHub</a></li>
-      <li><a href="Roman_Hage_Resume.pdf" target="_blank">Résumé (PDF)</a></li>
+      <li><a href="mailto:r0manelha@gmail.com"><span class="link-label">Email</span><span class="link-value">r0manelha@gmail.com</span></a></li>
+      <li><a href="https://www.linkedin.com/in/roman-hage" target="_blank" rel="noopener"><span class="link-label">LinkedIn</span><span class="link-value">linkedin.com/in/roman-hage</span></a></li>
+      <li><a href="Roman_Hage_Resume.pdf" target="_blank"><span class="link-label">Résumé</span><span class="link-value">View PDF</span></a></li>
     </ul>
   </div>
 </section>
