@@ -26,7 +26,11 @@
   nav ul { list-style:none; display:flex; gap:22px; margin:0; padding:0; }
   nav ul a { color:var(--muted); font-size:.95rem; }
   nav ul a:hover { color:var(--text); text-decoration:none; }
-  @media (max-width:700px) { nav ul { gap:12px; font-size:.8rem; } nav .brand { display:none; } }
+  @media (max-width:700px) {
+    nav .brand { display:none; }
+    nav ul { gap:18px; font-size:.85rem; overflow-x:auto; white-space:nowrap; width:100%; scrollbar-width:none; }
+    nav ul::-webkit-scrollbar { display:none; }
+  }
 
   /* Hero */
   header { padding:100px 0 70px; }
@@ -36,13 +40,17 @@
   .btn.primary { background:var(--accent); border-color:var(--accent); color:#111; }
   .btn:hover { text-decoration:none; filter:brightness(1.1); }
 
+  h3.sub { font-size:1.3rem; margin:44px 0 6px; padding-top:28px; border-top:1px dashed var(--line); }
+  .sub-intro { color:var(--muted); margin:0 0 20px; }
+  .card.placeholder { border-style:dashed; }
   section { padding:70px 0; border-top:1px solid var(--line); }
 
   /* Project cards */
   .grid { display:grid; gap:24px; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); }
   .card { background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
   .media { aspect-ratio:16/9; background:#1f232a; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:.85rem; text-align:center; padding:10px; }
-  .media iframe { width:100%; height:100%; border:0; }
+  .media iframe, .media video { width:100%; height:100%; border:0; background:#000; }
+  .media:has(video) { padding:0; }
   .card .body { padding:20px; }
   .role { color:var(--accent2); font-size:.85rem; font-weight:600; margin-bottom:6px; }
   .card p { color:var(--muted); font-size:.95rem; margin:8px 0; }
@@ -69,8 +77,9 @@
   <div class="wrap">
     <a class="brand" href="#">Roman Hage</a>
     <ul>
-      <li><a href="#games">Game Audio</a></li>
+      <li><a href="#sound">Sound Design</a></li>
       <li><a href="#motion">Animation &amp; MoCap</a></li>
+      <li><a href="#games">Game Projects</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -80,73 +89,64 @@
 <!-- ===== HERO ===== -->
 <header>
   <div class="wrap">
-    <div class="eyebrow">Sound Designer · Game Audio · Animation</div>
-    <h1>I make games <span class="accent">sound</span> alive.</h1>
-    <p class="muted">I'm Roman Hage, a sound designer and game audio designer studying Computer Game Design at UC Santa Cruz. I build audio in FMOD and Unity, record original foley, and work in animation and motion capture.</p>
-    <a class="btn primary" href="#games">See my work</a>
+    <div class="eyebrow">Sound Design · Animation · Game Projects</div>
+    <h1>Sound, motion &amp; <span class="accent">games</span>.</h1>
+    <p class="muted">I'm Roman Hage, a sound designer and animator pursuing a B.S. in Computer Science: Computer Game Design at UC Santa Cruz. I design and implement game audio in FMOD and Unity, record original foley, and capture and animate motion with OptiTrack.</p>
+    <a class="btn primary" href="#sound">See my work</a>
     <a class="btn" href="#contact">Get in touch</a>
   </div>
 </header>
 
-<!-- ===== GAME AUDIO ===== -->
 <!-- To add a video, replace the text inside <div class="media"> with:
      <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen></iframe> -->
-<section id="games">
+
+<!-- ===== SOUND DESIGN ===== -->
+<section id="sound">
   <div class="wrap">
-    <div class="eyebrow">Game Projects</div>
-    <h2>Game Audio &amp; Sound Design</h2>
+    <div class="eyebrow">Sound Design</div>
+    <h2>Sound Design</h2>
+    <p class="muted" style="max-width:640px;margin-top:-12px;margin-bottom:28px">Sound redesigns, foley and audio production work.</p>
     <div class="grid">
-
       <div class="card">
-        <div class="media">Polynex video (add YouTube embed)</div>
+        <div class="media"><video controls preload="none" playsinline poster="videos/foley-fungi.jpg" aria-label="Foley Fungi"><source src="videos/foley-fungi.mp4" type="video/mp4"></video></div>
         <div class="body">
-          <div class="role">Audio Designer · 5-person team</div>
-          <h3>Polynex</h3>
-          <p>A turn-based game demo. I designed the SFX and music and implemented them in FMOD with Unity. I also worked with the game designer on levels.</p>
-          <div class="tags"><span class="tag">FMOD</span><span class="tag">Unity</span><span class="tag">Pro Tools</span></div>
+          <div class="role">Original Foley · Home Recording Booth</div>
+          <h3>Foley Fungi</h3>
+          <p>I scored a time-lapse of ink cap mushrooms sprouting, unfurling and melting into ink, using only foley I recorded myself. I performed leathers and fabrics in my own recording booth to get the stretching, creaking and wet textures, cleaned the takes in Audacity, then edited and shaped them in Reaper with its built-in plugins.</p>
+          <div class="tags"><span class="tag">Foley</span><span class="tag">Reaper</span><span class="tag">Audacity</span><span class="tag">Recording</span></div>
         </div>
       </div>
-
       <div class="card">
-        <div class="media">Dead End Studios audio reel (add embed)</div>
+        <div class="media">Audio sample (add SoundCloud embed)</div>
         <div class="body">
-          <div class="role">Associate Game Audio Designer · 2023–2025</div>
-          <h3>Dead End Studios</h3>
-          <p>I was the only audio designer on a remote indie team. I built the soundscape in FMOD and Unity and also helped with animation and level design.</p>
-          <div class="tags"><span class="tag">FMOD</span><span class="tag">Unity</span></div>
+          <div class="role">Audio Engineer Intern · Tapedub, Berlin</div>
+          <h3>Tapedub Audio Production</h3>
+          <p>Audio production for cassette releases for international clients, plus live sound setup for three events at different venues.</p>
+          <div class="tags"><span class="tag">Audio Production</span><span class="tag">Live Sound</span><span class="tag">Q-SYS</span></div>
         </div>
       </div>
-
+    </div>
+    <h3 class="sub">Redesign Segments</h3>
+    <p class="sub-intro">I strip the original audio from a clip and rebuild the sound from scratch.</p>
+    <div class="grid">
       <div class="card">
-        <div class="media">Arcane redesign video (add embed)</div>
+        <div class="media"><video controls preload="none" playsinline poster="videos/arcane-redesign.jpg" aria-label="Arcane Season 1 sound redesign"><source src="videos/arcane-redesign.mp4" type="video/mp4"></video></div>
         <div class="body">
-          <div class="role">Sound Redesign</div>
-          <h3>Arcane: Sound Redesign</h3>
-          <p>I rebuilt the effects track for an Arcane clip in Pro Tools over three weeks, using my own foley plus library sources.</p>
-          <div class="tags"><span class="tag">Pro Tools</span><span class="tag">Foley</span></div>
+          <div class="role">Sound Redesign · Long-form Project</div>
+          <h3>Arcane (Season 1)</h3>
+          <p>A longer, more detailed redesign of an Arcane Season 1 sequence. I rebuilt the hextech energy, combat and ambience layer by layer in Pro Tools, blending my own foley with library sources and mixing it to match the show's cinematic scale.</p>
+          <div class="tags"><span class="tag">Pro Tools</span><span class="tag">Foley</span><span class="tag">Sound Design</span><span class="tag">Mixing</span></div>
         </div>
       </div>
-
       <div class="card">
-        <div class="media">Foley piece (add embed)</div>
+        <div class="media"><video controls preload="none" playsinline poster="videos/elden-ring-redesign.jpg" aria-label="Elden Ring sound redesign"><source src="videos/elden-ring-redesign.mp4" type="video/mp4"></video></div>
         <div class="body">
-          <div class="role">Original Foley</div>
-          <h3>Original Foley Project</h3>
-          <p>Every sound here is my own recording, made with an SM7B and Rode PodMic in a closet booth and edited in Reaper.</p>
-          <div class="tags"><span class="tag">Reaper</span><span class="tag">Recording</span></div>
+          <div class="role">Sound Redesign · Short Project</div>
+          <h3>Elden Ring</h3>
+          <p>A fast-paced redesign of a hand-drawn Elden Ring fight animation. I built every sword swing, impact and debris hit from my own sound library, then edited and mixed it in Pro Tools to land with each cut.</p>
+          <div class="tags"><span class="tag">Pro Tools</span><span class="tag">Personal SFX Library</span><span class="tag">Mixing</span></div>
         </div>
       </div>
-
-      <div class="card">
-        <div class="media">Final Transmission video (add embed)</div>
-        <div class="body">
-          <div class="role">Level Designer · 3-person team</div>
-          <h3>Final Transmission</h3>
-          <p>A 3D walking simulator made in a five-week sprint. I designed the level and modeled it in Maya.</p>
-          <div class="tags"><span class="tag">Maya</span><span class="tag">Level Design</span></div>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
@@ -156,28 +156,68 @@
   <div class="wrap">
     <div class="eyebrow">Animation &amp; Motion Capture</div>
     <h2>Animation &amp; MoCap</h2>
+    <p class="muted" style="max-width:640px;margin-top:-12px;margin-bottom:28px">My animation work and motion capture pipeline, from capture to game engine.</p>
     <div class="grid">
-
       <div class="card">
         <div class="media">MoCap reel (add embed)</div>
         <div class="body">
           <div class="role">Assistant MoCap Engineer · LEMI Lab, UCSC</div>
           <h3>Motion Capture Lab</h3>
           <p>I set up OptiTrack and Motive, capture human and animal performers, clean the data, and retarget it onto rigs for game engines.</p>
-          <div class="tags"><span class="tag">OptiTrack</span><span class="tag">Motive</span><span class="tag">Unity</span></div>
+          <div class="tags"><span class="tag">OptiTrack</span><span class="tag">Motive</span><span class="tag">Retargeting</span><span class="tag">Unity</span></div>
         </div>
       </div>
-
       <div class="card">
         <div class="media">Animation reel (add embed)</div>
         <div class="body">
           <div class="role">Animation</div>
           <h3>Animation Reel</h3>
-          <p>A selection of my character and game animation work.</p>
+          <p>A selection of my character and game animation work, including animation I did at Dead End Studios.</p>
           <div class="tags"><span class="tag">Maya</span><span class="tag">Blender</span></div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
 
+<!-- ===== GAME PROJECTS ===== -->
+<section id="games">
+  <div class="wrap">
+    <div class="eyebrow">Game Projects</div>
+    <h2>Game Projects</h2>
+    <p class="muted" style="max-width:640px;margin-top:-12px;margin-bottom:28px">Games I've helped build, covering audio, level design and animation.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="media">Polynex video (add YouTube embed)</div>
+        <div class="body">
+          <div class="role">Sole Audio Designer · Dead End Studios · 2023–2025</div>
+          <h3>Polynex</h3>
+          <p>A turn-based game I made with Dead End Studios. I was the only audio designer, building the SFX and music and implementing them in FMOD with Unity. I also helped with animation and with level design alongside the game designer.</p>
+          <div class="tags"><span class="tag">FMOD</span><span class="tag">Unity</span><span class="tag">Pro Tools</span><span class="tag">Animation</span><span class="tag">Level Design</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="media">Final Transmission video (add embed)</div>
+        <div class="body">
+          <div class="role">Level Designer · 3-person team · 5 weeks</div>
+          <h3>Final Transmission</h3>
+          <p>A 3D walking simulator. I designed the level, mocked up layouts in Photoshop, and modeled it in Maya.</p>
+          <div class="tags"><span class="tag">Level Design</span><span class="tag">Maya</span><span class="tag">Photoshop</span></div>
+        </div>
+      </div>
+    </div>
+    <h3 class="sub">Game Capstone</h3>
+    <p class="sub-intro">My UC Santa Cruz senior capstone game, in development starting Winter 2027.</p>
+    <div class="grid">
+      <div class="card placeholder">
+        <div class="media">Coming soon</div>
+        <div class="body">
+          <div class="role">Capstone · UC Santa Cruz · Winter 2027</div>
+          <h3>Capstone Project (Title TBA)</h3>
+          <p>Details, screenshots and video are coming as development gets underway.</p>
+          <div class="tags"><span class="tag">In Development</span></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
