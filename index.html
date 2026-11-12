@@ -7,7 +7,7 @@
 <meta name="description" content="Roman Hage: sound designer, game audio designer and animator.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Oswald:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root { --bg:#0d0f12; --card:#15181d; --line:#262a31; --text:#e8e6e1; --muted:#9a9fa8; --accent:#ff7a45; --accent2:#5ad1c4; }
   * { box-sizing: border-box; }
@@ -232,6 +232,93 @@
     h1.glitch, h1.glitch::before, h1.glitch::after, .glitch.go, .glitch.go::before, .glitch.go::after,
     .cursor { animation:none !important; }
   }
+
+  /* ===== THEME v3: propaganda-poster ===== */
+  :root { --bg:#0c0a0a; --card:#141010; --line:#3a1818; --text:#ece6da; --muted:#a89f92; --accent:#c8161d; --accent2:#3fa9dc; --orange:#d8481e; --paper:#e9e3d6; --ink:#141111; --display:"Oswald","Arial Narrow",sans-serif; }
+  h1, h2, h3, .btn, nav .brand { font-family:var(--display); }
+  h1::after { content:none; }
+  .c { color:var(--accent2); }
+  .code { font-family:var(--display); font-style:italic; font-weight:600; letter-spacing:.06em; color:var(--orange); transform:skewX(-8deg); display:inline-block; }
+
+  /* nav */
+  nav { background:#0c0a0a; border-bottom:3px solid var(--accent); }
+  nav .brand { font-size:1.25rem; font-weight:600; font-style:italic; letter-spacing:.06em; color:var(--orange); }
+  nav .brand::before { content:none; }
+  nav ul a { font-family:var(--mono); }
+
+  /* hero poster */
+  header.poster { padding:0; background:var(--accent); color:var(--paper); position:relative; overflow:hidden;
+    background-image:radial-gradient(rgba(0,0,0,.18) 1px, transparent 1.4px); background-size:6px 6px; }
+  header.poster::before { content:""; position:absolute; right:-120px; top:-120px; width:520px; height:520px; border-radius:50%; border:2px solid rgba(233,227,214,.25); }
+  .poster-grid { display:grid; grid-template-columns:auto 1fr 260px; gap:28px; padding-top:60px; padding-bottom:50px; position:relative; }
+  .poster-num { font-family:var(--display); font-weight:700; font-size:5.5rem; line-height:.8; color:var(--paper); border:3px solid var(--paper); padding:6px 14px 2px; align-self:start; }
+  .poster-main .code { color:var(--ink); font-size:1.05rem; margin-bottom:10px; }
+  .poster-main .code .c { color:var(--paper); }
+  header.poster h1 { font-family:var(--display); font-weight:700; font-size:clamp(2.8rem,7.5vw,5.6rem); line-height:.95; letter-spacing:.01em; text-transform:uppercase; color:var(--paper); text-shadow:none; margin:0 0 22px; }
+  header.poster h1 .accent { color:var(--ink); }
+  header.poster .lead { color:var(--paper); font-size:1.08rem; max-width:620px; }
+  header.poster .now { color:rgba(233,227,214,.82); font-size:.95rem; max-width:620px; border-left:3px solid var(--ink); padding-left:12px; margin-top:16px; }
+  header.poster .now strong { color:var(--paper); }
+  .poster-side { display:flex; flex-direction:column; align-items:center; gap:18px; }
+  .emblem { width:190px; height:190px; filter:drop-shadow(0 6px 0 rgba(0,0,0,.35)); }
+  .vert { font-family:var(--display); font-weight:700; font-size:4.6rem; line-height:1; letter-spacing:.04em; writing-mode:vertical-rl; transform:rotate(180deg); color:transparent; -webkit-text-stroke:2px var(--paper); }
+  .poster-bar { background:var(--ink); color:var(--paper); display:flex; flex-wrap:wrap; gap:8px 26px; justify-content:center; padding:10px 20px; font-family:var(--mono); text-transform:uppercase; letter-spacing:.14em; font-size:.75rem; }
+  .poster-bar span::before { content:"■ "; color:var(--accent); }
+  @media (max-width:860px) { .poster-grid { grid-template-columns:1fr; } .poster-num { display:none; } .poster-side { flex-direction:row; justify-content:flex-start; } .emblem { width:120px; height:120px; } .vert { writing-mode:horizontal-tb; transform:none; font-size:3rem; } }
+
+  /* section headers */
+  section { border-top:none; padding:80px 0; }
+  section .eyebrow { font-family:var(--display); font-style:italic; font-weight:600; letter-spacing:.08em; color:var(--orange); transform:skewX(-8deg); display:inline-block; font-size:.95rem; }
+  section .eyebrow::before { content:counter(sec, decimal-leading-zero); display:inline-block; font-style:normal; font-weight:700; color:var(--paper); background:var(--accent); padding:2px 10px; margin-right:12px; transform:skewX(8deg); font-size:1.3rem; line-height:1.2; vertical-align:middle; }
+  section h2 { font-family:var(--display); font-weight:700; text-transform:uppercase; font-size:clamp(2.2rem,5vw,3.6rem); line-height:1; letter-spacing:.01em; display:flex; align-items:center; gap:16px; border-bottom:3px solid var(--accent); padding-bottom:14px; }
+  section h2.glitch { display:flex; }
+  h3.sub { font-family:var(--display); font-weight:600; font-style:italic; color:var(--orange); border-top:1px solid var(--line); letter-spacing:.06em; }
+
+  /* cards as poster panels */
+  .card { border:none; background:var(--card); border-top:5px solid var(--accent); }
+  .card::before, .card::after { content:none; }
+  .card .body { position:relative; }
+  .card h3 { font-family:var(--display); font-weight:600; text-transform:uppercase; font-size:1.55rem; letter-spacing:.02em; line-height:1.1; }
+  .role { font-family:var(--display) !important; font-style:italic; font-weight:600; letter-spacing:.06em !important; color:var(--orange) !important; font-size:.85rem !important; }
+  .hook { border-left:3px solid var(--accent); padding-left:10px; }
+  .tag { background:transparent; border:1px solid #4a2a2a; color:var(--paper); font-family:var(--mono); }
+  .tag::before { content:"■ "; color:var(--accent); font-size:.6rem; }
+  .card:hover { transform:translateY(-3px); transition:transform .15s; }
+  .card:hover { border-top-color:var(--accent2); }
+  .feature .feature-top .body { background:linear-gradient(90deg, rgba(200,22,29,.08), transparent 40%); }
+  .status.now { background:var(--accent); color:var(--paper); border-color:var(--accent); }
+  .status.past { background:transparent; color:var(--muted); border:1px solid var(--line); }
+
+  /* buttons */
+  .btn { border:2px solid var(--paper); color:var(--paper); font-weight:600; letter-spacing:.1em; }
+  .btn.primary { background:var(--accent); border-color:var(--accent); }
+
+  /* experience section on cream paper */
+  section#experience { background:var(--paper); color:var(--ink); }
+  section#experience h2 { color:var(--ink); }
+  section#experience .muted, section#experience p { color:#4d4640; }
+  section#experience h3 { color:var(--ink); font-family:var(--display); font-weight:600; text-transform:uppercase; letter-spacing:.02em; }
+  section#experience .job { border-left:3px solid var(--accent); padding-left:12px; }
+  section#experience .job .when { color:var(--accent); font-family:var(--mono); }
+  section#experience .tag { color:var(--ink); border-color:#b9ae9c; }
+  section#experience .eyebrow { color:var(--accent); }
+
+  /* contact as red poster block */
+  section#contact { background:var(--accent); color:var(--paper);
+    background-image:radial-gradient(rgba(0,0,0,.16) 1px, transparent 1.4px); background-size:6px 6px; }
+  section#contact h2 { border-bottom-color:var(--paper); color:var(--paper); }
+  section#contact .eyebrow::before { background:var(--ink); }
+  section#contact .eyebrow { color:var(--ink); }
+  section#contact .muted { color:var(--paper); }
+  section#contact .links a { background:var(--ink); border:none; }
+  section#contact .links a:hover { background:#000; }
+  .link-value { color:var(--accent2) !important; }
+
+  footer { background:var(--ink); border-top:3px solid var(--accent); }
+  footer .wrap { display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; }
+  footer .code { transform:skewX(-8deg); }
+
+  .to-top { background:var(--accent); }
 </style>
 </head>
 <body id="top">
@@ -240,7 +327,7 @@
 
 <nav>
   <div class="wrap">
-    <a class="brand" href="#top">Roman Hage</a>
+    <a class="brand" href="#top">ROMAN HAG<span class="c">E</span></a>
     <ul>
       <li><a href="#top">Home</a></li>
       <li><a href="#sound">Sound Design</a></li>
@@ -254,13 +341,35 @@
 </nav>
 
 <!-- ===== HERO ===== -->
-<header>
-  <div class="wrap">
-    <div class="eyebrow">Sound Design · Animation · Game Projects</div>
-    <h1>Sound, motion &amp; <span class="accent">games</span>.</h1>
-    <p class="muted">I'm Roman Hage, currently pursuing a B.S. in Computer Science: Computer Game Design at UC Santa Cruz. I design and implement game audio and sound, and capture and animate motion with OptiTrack. I'm looking to bring that experience to a AAA studio.</p>
-    <p class="muted" style="font-size:1rem;margin-top:14px">Currently playing <strong style="color:var(--text);font-weight:600">Disco Elysium</strong>, after wrapping up a full <strong style="color:var(--text);font-weight:600">Witcher 3</strong> playthrough to get ready for the next Witcher.</p>
+<header class="poster">
+  <div class="wrap poster-grid">
+    <div class="poster-num">1</div>
+    <div class="poster-main">
+      <div class="code">SND<span class="c">R</span> · ANM<span class="c">R</span> · GM<span class="c">E</span></div>
+      <h1>Sound, motion &amp; <span class="accent">games</span>.</h1>
+      <p class="lead">I'm Roman Hage, currently pursuing a B.S. in Computer Science: Computer Game Design at UC Santa Cruz. I design and implement game audio and sound, and capture and animate motion with OptiTrack. I'm looking to bring that experience to a AAA studio.</p>
+      <p class="now">Currently playing <strong>Disco Elysium</strong>, after wrapping up a full <strong>Witcher 3</strong> playthrough to get ready for the next Witcher.</p>
+    </div>
+    <div class="poster-side">
+      <svg class="emblem" viewBox="0 0 200 200" aria-hidden="true">
+          <circle cx="100" cy="100" r="96" fill="#0c0a0a"/>
+          <circle cx="100" cy="100" r="88" fill="none" stroke="#3fa9dc" stroke-width="5"/>
+          <g transform="translate(100 92)">
+            <rect x="-62" y="-6" width="10" height="12" fill="#e9e3d6"/>
+            <rect x="-46" y="-18" width="10" height="36" fill="#3fa9dc"/>
+            <rect x="-30" y="-34" width="10" height="68" fill="#e9e3d6"/>
+            <rect x="-14" y="-48" width="10" height="96" fill="#c8161d"/>
+            <rect x="2" y="-30" width="10" height="60" fill="#e9e3d6"/>
+            <rect x="18" y="-42" width="10" height="84" fill="#3fa9dc"/>
+            <rect x="34" y="-20" width="10" height="40" fill="#e9e3d6"/>
+            <rect x="50" y="-8" width="10" height="16" fill="#3fa9dc"/>
+          </g>
+          <text x="100" y="164" text-anchor="middle" font-family="Oswald, sans-serif" font-size="20" letter-spacing="5" fill="#e9e3d6">RH · 01</text>
+        </svg>
+      <div class="vert" aria-hidden="true">SOUND</div>
+    </div>
   </div>
+  <div class="poster-bar"><span>RH-2026</span><span>Sound Design</span><span>Motion Capture</span><span>Game Projects</span><span>UC Santa Cruz</span></div>
 </header>
 
 <!-- To add a video, replace the text inside <div class="media"> with:
@@ -530,7 +639,7 @@
 </section>
 
 <footer>
-  <div class="wrap">© 2026 Roman Hage · Sound Design &amp; Animation</div>
+  <div class="wrap"><span>© 2026 Roman Hage</span><span class="code">SOUND · MOTION · GAME<span class="c">S</span></span><span>RH-01 // END OF FILE</span></div>
 </footer>
 
 <a href="#top" class="to-top" aria-label="Back to top">↑</a>
