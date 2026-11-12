@@ -389,7 +389,7 @@ section h2.glitch{position:relative}
   <div class="wrap">
     <div class="eyebrow">Game AI Research</div>
     <h2>Game AI Research</h2>
-    <p class="intro">I'm a Game AI Undergraduate Research Assistant in the Augmented Design Lab at UC Santa Cruz, led by Professor Jim Whitehead. I work on a 7-person team running design probes on how AI models can play games and act as NPCs. I present our progress every two weeks and help keep the team's tasks moving.</p>
+    <p class="intro">I'm a Game AI Undergraduate Research Assistant in the Augmented Design Lab at UC Santa Cruz, led by Professor Jim Whitehead. I work on a 7-person team running design probes on how AI models can play games and act as NPCs. We present our progress every two weeks, and I help keep the team's tasks on track.</p>
     <div class="grid">
 
       <div class="card">
@@ -398,7 +398,7 @@ section h2.glitch{position:relative}
           <div class="role">Godot · Jev · Laya · Prompt Engineering</div>
           <h3>NPC Personalities in a Colony Sim</h3>
           <p class="hook">Testing whether AI characters with different personalities make different choices in the same situation.</p>
-          <p>Our team is building a RimWorld-style survival game in Godot where every character is controlled by Jev, our lab's AI model. As prompt engineer, I write and test the personality prompts that drive each character's decisions, then benchmark survival time and progress against standard behavior-tree NPCs. We also record Jev's decisions across many runs and use them to train Laya, a smaller model that can run on everyday hardware.</p>
+          <p>I drafted the game's design spec: a top-down Godot survival game where characters manage health and hunger, gather resources, craft tools and survive nightly monsters, with every character controlled by Jev, an AI model from TypeSpace AI. As the team's prompt engineer, I write and test the personality prompts that drive each character's decisions and compare how they behave in the same scenarios. I also run benchmark and open-ended sessions with Jev and record its decisions, which we use to train Laya, a smaller model.</p>
           <div class="tags"><span class="tag">Godot</span><span class="tag">LLM Agents</span><span class="tag">Prompt Engineering</span><span class="tag">Benchmarking</span><span class="tag">Jev</span><span class="tag">Laya Training</span></div>
         </div>
       </div>
@@ -406,11 +406,11 @@ section h2.glitch{position:relative}
       <div class="card">
         <div class="body">
           <span class="status past">Past probe</span>
-          <div class="role">Jev · Prompt Engineering · Latency Testing</div>
+          <div class="role">Jev · Prompt Engineering</div>
           <h3>AI Pac-Man Player</h3>
           <p class="hook">Testing whether Jev can play Pac-Man as well as a standard game AI.</p>
-          <p>I connected Jev to a Pac-Man prototype and experimented with how the game state is described in prompts, script-based movement control and local model latency. The key finding was that Jev couldn't judge danger, such as telling a ghost behind a wall from one two tiles away. That result led the team to move to the colony sim.</p>
-          <div class="tags"><span class="tag">Jev</span><span class="tag">Prompt Engineering</span><span class="tag">Local Models</span><span class="tag">Latency</span></div>
+          <p>I connected the Jev API to our team's Pac-Man prototype in my own test build. I experimented with different ways of describing the game state in prompts and with having Jev give high-level goals that a script turns into movement. I found that Jev couldn't judge danger, such as telling a ghost behind a wall from one two tiles away, which led the team to move to the colony sim.</p>
+          <div class="tags"><span class="tag">Jev</span><span class="tag">Prompt Engineering</span></div>
         </div>
       </div>
 
@@ -420,7 +420,7 @@ section h2.glitch{position:relative}
           <div class="role">Phaser · PixelLab · Claude Code</div>
           <h3>AI-Generated Top-Down Worlds</h3>
           <p class="hook">Exploring whether an AI coding agent can build coherent top-down maps from a tileset.</p>
-          <p>Using Phaser and PixelLab, I had an AI coding agent generate maps from Kenney's Tiny Town tileset. I wrote a pixel-verified guide to all 132 tiles and built tools that check every map against 15 placement rules. The key lesson was that a map can pass every rule and still be unplayable, so reachability testing is essential.</p>
+          <p>I set up a Phaser project where an AI coding agent generated maps from Kenney's Tiny Town tileset, using PixelLab to create missing tiles. I wrote a pixel-verified guide to all 132 tiles and built validation tools that check every map against 15 placement rules. My key finding was that a map can pass every rule and still be unplayable, so checking that players can reach every area is essential.</p>
           <div class="tags"><span class="tag">Phaser</span><span class="tag">PixelLab</span><span class="tag">Procedural Generation</span><span class="tag">Claude Code</span></div>
         </div>
       </div>
