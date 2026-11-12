@@ -13,7 +13,7 @@
 :root{--bg:#0c0a0a;--card:#141010;--line:#3a1818;--text:#ece6da;--muted:#a89f92;--red:#c8161d;--cyan:#3fa9dc;--orange:#d8481e;--paper:#e9e3d6;--ink:#141111;--display:"Oswald","Arial Narrow",sans-serif;--mono:"Share Tech Mono",ui-monospace,monospace}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--bg)}
-body{margin:0;color:var(--text);font:16px/1.6 "IBM Plex Sans",system-ui,sans-serif;counter-reset:sec}
+body{margin:0;color:var(--text);font:1rem/1.6 "IBM Plex Sans",system-ui,sans-serif;counter-reset:sec}
 a{color:var(--red);text-decoration:none}
 img,video,iframe{display:block;max-width:100%}
 ::selection{background:var(--red);color:#fff}
@@ -31,20 +31,22 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;tr
 
 /* nav */
 nav{position:sticky;top:0;z-index:10;background:#0c0a0a;border-bottom:3px solid var(--red)}
-nav .wrap{display:flex;justify-content:center;align-items:center;height:60px}
+nav .wrap{display:flex;justify-content:center;align-items:center;height:3.75rem}
 nav ul{list-style:none;display:flex;gap:22px;margin:0;padding:0}
-nav ul a{position:relative;display:inline-block;padding:4px 8px;margin:0 -8px;font:.85rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);transition:background .12s,color .12s}
+nav ul a{position:relative;display:inline-block;white-space:nowrap;padding:4px 8px;margin:0 -8px;font:.85rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);transition:background .12s,color .12s}
 nav ul a::before,nav ul a::after{position:absolute;color:var(--red);opacity:0;transition:opacity .12s,transform .12s}
 nav ul a::before{content:"[";left:-2px}
 nav ul a::after{content:"]";right:-2px}
 nav ul a:hover{color:var(--text);background:rgba(212,32,47,.18)}
 nav ul a:hover::before{opacity:1;transform:translateX(-4px)}
 nav ul a:hover::after{opacity:1;transform:translateX(4px)}
-@media(max-width:700px){nav ul{gap:18px;overflow-x:auto;white-space:nowrap;width:100%;scrollbar-width:none}nav ul::-webkit-scrollbar{display:none}}
+@media(max-width:1060px){nav ul{gap:16px}nav ul a{font-size:.78rem}}
+@media(max-width:900px){nav ul{gap:18px;overflow-x:auto;width:100%;padding:0 4px;scrollbar-width:none}nav ul::-webkit-scrollbar{display:none}}
+@media(max-width:600px){nav .wrap{height:auto;padding:10px 12px}nav ul{flex-wrap:wrap;justify-content:center;gap:4px 16px;overflow:visible}nav ul a{font-size:.74rem}}
 
 /* hero poster */
 .poster{position:relative;overflow:hidden;background:var(--red) radial-gradient(rgba(0,0,0,.18) 1px,transparent 1.4px) 0 0/6px 6px;color:var(--paper)}
-.hero-emblem{position:absolute;right:-70px;top:30px;width:430px;height:430px;opacity:.55;pointer-events:none}
+.hero-emblem{position:absolute;right:-70px;top:30px;width:clamp(260px,30vw,600px);height:auto;aspect-ratio:1;opacity:.55;pointer-events:none}
 .poster-grid{position:relative;padding-top:70px;padding-bottom:60px}
 .code{display:inline-block;transform:skewX(-8deg);font:italic 600 1.05rem var(--display);letter-spacing:.06em;color:var(--ink);margin-bottom:10px}
 .c{color:var(--paper)}
@@ -56,7 +58,10 @@ nav ul a:hover::after{opacity:1;transform:translateX(4px)}
 .poster-bar{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 26px;padding:10px 20px;background:var(--ink);font:.75rem var(--mono);text-transform:uppercase;letter-spacing:.14em}
 .poster-bar span::before{content:"■ ";color:var(--red)}
 .cursor{color:var(--ink);margin-left:4px;animation:blink 1.1s steps(1) infinite}
-@media(max-width:860px){.hero-emblem{width:260px;height:260px;right:-60px;top:10px;opacity:.35}}
+@media(max-width:860px){.hero-emblem{width:240px;right:-70px;top:10px;opacity:.3}}
+
+@media(min-width:1700px){html{font-size:18px}.wrap{max-width:1360px}}
+@media(min-width:2200px){html{font-size:20px}.wrap{max-width:1560px}}
 
 /* sections */
 section{counter-increment:sec;padding:80px 0}
@@ -190,7 +195,7 @@ section h2.glitch{position:relative}
     <div class="poster-main">
       <div class="code">SND<span class="c">R</span> · ANM<span class="c">R</span> · GM<span class="c">E</span></div>
       <h1>Sound, motion &amp; <span class="accent">games</span>.</h1>
-      <p class="lead">I'm Roman Hage, currently pursuing a B.S. in Computer Science: Computer Game Design at UC Santa Cruz. I design and implement game audio and sound, and capture and animate motion with OptiTrack. I'm looking to bring that experience to a AAA studio.</p>
+      <p class="lead">I'm Roman Hage, a sound designer and motion capture artist pursuing a B.S. in Computer Science: Computer Game Design at UC Santa Cruz. I design and implement game audio using DAWs and audio middleware, and I capture and animate motion with OptiTrack. I'm currently seeking opportunities to contribute to audio and animation teams across the games industry, from indie studios to AAA.</p>
       <p class="now">Currently playing <strong>Disco Elysium</strong>, after wrapping up a full <strong>Witcher 3</strong> playthrough to get ready for the next Witcher.</p>
     </div>
   </div>
