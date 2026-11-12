@@ -81,6 +81,11 @@
   .track-title { font-size:.85rem; color:var(--text); margin-bottom:8px; }
   .track-title span { color:var(--muted); }
   .track audio { width:100%; height:36px; }
+  .card .links-row { margin-top:12px; font-size:.88rem; }
+  .card .links-row a { margin-right:14px; }
+  .status { display:inline-block; font-size:.72rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; padding:3px 10px; border-radius:999px; margin-bottom:10px; }
+  .status.now { background:rgba(90,209,196,.12); color:var(--accent2); border:1px solid rgba(90,209,196,.35); }
+  .status.past { background:#1f2329; color:var(--muted); border:1px solid var(--line); }
   section { padding:70px 0; border-top:1px solid var(--line); }
 
   /* Project cards */
@@ -122,7 +127,8 @@
       <li><a href="#sound">Sound Design</a></li>
       <li><a href="#motion">Animation &amp; MoCap</a></li>
       <li><a href="#games">Game Projects</a></li>
-      <li><a href="#about">About</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#experience">Experience</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </div>
@@ -134,6 +140,7 @@
     <div class="eyebrow">Sound Design · Animation · Game Projects</div>
     <h1>Sound, motion &amp; <span class="accent">games</span>.</h1>
     <p class="muted">I'm Roman Hage, currently pursuing a B.S. in Computer Science: Computer Game Design at UC Santa Cruz. I design and implement game audio and sound, and capture and animate motion with OptiTrack. I'm looking to bring that experience to a AAA studio.</p>
+    <p class="muted" style="font-size:1rem;margin-top:14px">Currently playing <strong style="color:var(--text);font-weight:600">Disco Elysium</strong>, after wrapping up a full <strong style="color:var(--text);font-weight:600">Witcher 3</strong> playthrough to get ready for the next Witcher.</p>
   </div>
 </header>
 
@@ -296,6 +303,24 @@
           </div>
         </div>
       </div>
+      <div class="card feature" id="gem-hoard">
+        <div class="feature-top">
+          <div class="media" style="padding:0"><img src="gem-hoard.jpg" alt="Gem Hoard gameplay with the gem, gem counter and five upgrades" style="width:100%;height:100%;object-fit:cover"></div>
+          <div class="body">
+            <div class="role">Incremental Clicker · Team Project · CMPM 121</div>
+            <h3>Gem Hoard</h3>
+            <p class="hook">A fantasy-themed browser clicker game, built in TypeScript as a team for UC Santa Cruz's CMPM 121.</p>
+            <p>Players click a giant gem to collect currency, then spend it on five upgrades, from a Prospector's Pickaxe up to a Dragon's Hoard, that generate gems automatically. I built the core loop: the click button and counter, automatic gem growth tied to real time so it runs at the same speed on any frame rate, and a reset button for testing.</p>
+            <p>I then designed and implemented the game's theme and progression. Each upgrade unlocks only after you own enough of the earlier ones, prices rise 15% with each purchase, and owning 5, 10, 15, 20 or 25 of an upgrade doubles its output. I also added autosaving so progress carries over between visits, visual feedback like the gem squish, coin bursts, floating numbers and unlock animations, and added the background and upgrade art.</p>
+            <p>The upgrades all run from one shared data list, so adding a new one only takes a single entry instead of new code. We worked through GitHub pull requests, and the game deploys automatically to GitHub Pages.</p>
+            <div class="tags"><span class="tag">TypeScript</span><span class="tag">Vite</span><span class="tag">Game Design</span><span class="tag">Progression &amp; Economy</span><span class="tag">GitHub</span></div>
+            <div style="margin-top:12px">
+              <a class="btn primary" href="https://phoenixmay23.github.io/cmpm121--D1/" target="_blank" rel="noopener">Play in browser</a>
+              <a class="btn" href="https://github.com/Phoenixmay23/cmpm121--D1" target="_blank" rel="noopener">View code</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <h3 class="sub">Game Capstone</h3>
     <p class="sub-intro">My UC Santa Cruz senior capstone game, in development starting Winter 2027.</p>
@@ -314,11 +339,60 @@
   </div>
 </section>
 
+<!-- ===== GAME AI RESEARCH ===== -->
+<section id="research">
+  <div class="wrap">
+    <div class="eyebrow">Game AI Research</div>
+    <h2>Game AI Research</h2>
+    <p class="muted" style="max-width:720px;margin-top:-12px;margin-bottom:28px">I'm a Game AI Undergraduate Research Assistant in the Augmented Design Lab at UC Santa Cruz, led by Professor Jim Whitehead. I work on a 7-person team running design probes on how AI models can play games and act as NPCs. I present our progress every two weeks and help keep the team's tasks moving.</p>
+    <div class="grid">
+
+      <div class="card">
+        <div class="body">
+          <span class="status now">Current probe</span>
+          <div class="role">Godot · Prompt Engineering · Benchmarking</div>
+          <h3>NPC Personalities in a Colony Sim</h3>
+          <p class="hook">Testing whether AI-controlled characters with different personalities make different choices in the same situation.</p>
+          <p>We're building a top-down, RimWorld-style survival game in Godot where every character is controlled by an AI model. Characters manage health and hunger, hunt animals, chop trees, mine rocks, craft tools, defend against monsters at night, and can choose to help or attack each other. The goal is to fill a shared research bar.</p>
+          <p>I'm the team's prompt engineer, writing and testing the personality prompts that drive each character. We measure how long characters survive and how much research they complete, then run the same scenario many times to compare behavior across personalities. We also compare AI characters against standard behavior-tree NPCs and track cost to see if this is practical for real games.</p>
+          <p>Alongside this, we use the results to train a smaller model, recording the larger model's decisions across many runs and fine-tuning the small model on that data.</p>
+          <div class="tags"><span class="tag">Godot</span><span class="tag">LLM Agents</span><span class="tag">Prompt Engineering</span><span class="tag">Benchmarking</span><span class="tag">Fine-Tuning Data</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="body">
+          <span class="status past">Past probe</span>
+          <div class="role">AI Agents · Prompt Engineering · Latency Testing</div>
+          <h3>AI Pac-Man Player</h3>
+          <p class="hook">Can an AI model play Pac-Man well enough to compete with a standard game AI?</p>
+          <p>I tested our AI model in a Pac-Man prototype, experimenting with different ways to describe the game state in the prompt, giving the model high-level goals that a script turns into movement, and measuring response latency with local models.</p>
+          <p>The main finding: the model couldn't tell the difference between a ghost behind a wall and a ghost two tiles away, and Pac-Man's instant loss on contact gave no way to measure danger. That result led the team to the colony sim, where health and damage make danger measurable.</p>
+          <div class="tags"><span class="tag">AI Agents</span><span class="tag">Prompt Engineering</span><span class="tag">Local Models</span><span class="tag">Latency</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="body">
+          <span class="status past">Past probe</span>
+          <div class="role">Phaser · PixelLab · Claude Code</div>
+          <h3>AI-Generated Top-Down Worlds</h3>
+          <p class="hook">Can an AI coding agent build coherent top-down RPG maps from a tileset?</p>
+          <p>I used an AI coding agent with Phaser to generate top-down maps from Kenney's Tiny Town tileset, using PixelLab to create new tiles when the set was missing something. To help the agent, I wrote a pixel-verified guide to all 132 tiles and built validation tools that check every map against 15 placement rules.</p>
+          <p>The biggest takeaway: a map can pass every rule and still be unplayable, so checking that players can actually reach each area is just as important as following the rules.</p>
+          <div class="tags"><span class="tag">Phaser</span><span class="tag">PixelLab</span><span class="tag">Procedural Generation</span><span class="tag">Claude Code</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ===== ABOUT ===== -->
-<section id="about">
+<section id="experience">
   <div class="wrap cols">
     <div>
-      <div class="eyebrow">About</div>
+      <div class="eyebrow">Work &amp; Education</div>
       <h2>Experience</h2>
       <div class="job"><div class="when">2026 – present</div><h3>Assistant MoCap Engineer · LEMI Lab, UCSC</h3></div>
       <div class="job"><div class="when">2026 – present</div><h3>Game AI Research Assistant · Augmented Design Lab</h3></div>
