@@ -43,6 +43,32 @@
   h3.sub { font-size:1.3rem; margin:44px 0 6px; padding-top:28px; border-top:1px dashed var(--line); }
   .sub-intro { color:var(--muted); margin:0 0 20px; }
   .card.placeholder { border-style:dashed; }
+
+  /* Featured project + gallery */
+  .feature { grid-column:1 / -1; }
+  .feature-top { display:grid; grid-template-columns:1.4fr 1fr; align-items:start; }
+  .feature-top .body .btn { margin:10px 8px 0 0; }
+  .feature-top .media { aspect-ratio:16/9; padding:0; height:auto; align-self:start; }
+  .feature-top .body { padding:26px; }
+  @media (max-width:860px) { .feature-top { grid-template-columns:1fr; } }
+  .gallery { border-top:1px solid var(--line); padding:20px 26px 26px; }
+  .gallery-main { position:relative; background:#0a0b0d; border-radius:10px; overflow:hidden; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; }
+  .gallery-main img { max-width:100%; max-height:100%; object-fit:contain; }
+  .gallery-btn { position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,.6); color:#fff; border:1px solid var(--line); width:42px; height:42px; border-radius:50%; font-size:1.2rem; cursor:pointer; }
+  .gallery-btn:hover { background:var(--accent); color:#111; }
+  .gallery-btn.prev { left:12px; } .gallery-btn.next { right:12px; }
+  .gallery-cap { color:var(--muted); font-size:.85rem; margin:10px 0; text-align:center; }
+  .thumbs { display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; }
+  .thumbs img { width:96px; height:64px; object-fit:cover; border-radius:6px; border:2px solid transparent; cursor:pointer; opacity:.6; flex:none; }
+  .thumbs img.active, .thumbs img:hover { border-color:var(--accent); opacity:1; }
+  .feature .btn { font-size:.9rem; padding:9px 18px; }
+
+  .mocap-media { display:grid; grid-template-columns:0.62fr 1fr; gap:10px; padding:14px; background:#0a0b0d; }
+  .mocap-media video, .mocap-media img { width:100%; height:100%; max-height:460px; object-fit:cover; border-radius:10px; display:block; }
+  .milestones { list-style:none; padding:0; margin:14px 0 0; display:grid; gap:10px; }
+  .milestones li { padding-left:18px; position:relative; color:var(--muted); font-size:.93rem; }
+  .milestones li::before { content:""; position:absolute; left:0; top:.55em; width:8px; height:8px; border-radius:50%; background:var(--accent2); }
+  .milestones strong { color:var(--text); font-weight:600; }
   section { padding:70px 0; border-top:1px solid var(--line); }
 
   /* Project cards */
@@ -161,13 +187,25 @@
     <h2>Animation &amp; MoCap</h2>
     <p class="muted" style="max-width:640px;margin-top:-12px;margin-bottom:28px">My animation work and motion capture pipeline, from capture to game engine.</p>
     <div class="grid">
-      <div class="card">
-        <div class="media">MoCap reel (add embed)</div>
-        <div class="body">
-          <div class="role">Assistant MoCap Engineer · LEMI Lab, UCSC</div>
-          <h3>Motion Capture Lab</h3>
-          <p>I set up OptiTrack and Motive, capture human and animal performers, clean the data, and retarget it onto rigs for game engines.</p>
-          <div class="tags"><span class="tag">OptiTrack</span><span class="tag">Motive</span><span class="tag">Retargeting</span><span class="tag">Unity</span></div>
+      <div class="card feature" id="mocap">
+        <div class="feature-top">
+          <div class="mocap-media">
+            <video autoplay muted loop playsinline poster="mocap-live-tracking.jpg" aria-label="Live full-body skeleton tracking in Motive"><source src="mocap-live-tracking.mp4" type="video/mp4"></video>
+            <img src="mocap-motive.jpg" alt="41-marker skeleton solved in OptiTrack Motive with an 8-camera array" loading="lazy">
+          </div>
+          <div class="body">
+            <div class="role">Assistant MoCap Engineer · LEMI Lab, UC Santa Cruz</div>
+            <h3>Motion Capture Pipeline</h3>
+            <p>I'm helping stand up UCSC's optical motion capture lab from the ground up. We're building a working capture-to-engine pipeline on an 8-camera OptiTrack volume, solving full-body, 41-marker skeletons in real time in Motive.</p>
+            <ul class="milestones">
+              <li><strong>System bring-up:</strong> camera calibration, volume setup and onboarding to the Motive workflow</li>
+              <li><strong>Performance capture:</strong> suiting and marker placement, then live full-body skeleton tracking</li>
+              <li><strong>Rigid-body tracking:</strong> tracking props and objects alongside performers</li>
+              <li><strong>Engine integration:</strong> cleaning takes and exporting animation data into Unity</li>
+              <li><strong>Non-human capture:</strong> successfully exported non-human motion data, opening the door to creature and animal rigs</li>
+            </ul>
+            <div class="tags"><span class="tag">OptiTrack</span><span class="tag">Motive</span><span class="tag">Performance Capture</span><span class="tag">Rigid Bodies</span><span class="tag">Unity</span></div>
+          </div>
         </div>
       </div>
       <div class="card">
@@ -190,13 +228,35 @@
     <h2>Game Projects</h2>
     <p class="muted" style="max-width:640px;margin-top:-12px;margin-bottom:28px">Games I've helped build, covering audio, level design and animation.</p>
     <div class="grid">
-      <div class="card">
-        <div class="media">Polynex video (add YouTube embed)</div>
-        <div class="body">
-          <div class="role">Sole Audio Designer · Dead End Studios · 2023–2025</div>
-          <h3>Polynex</h3>
-          <p>A turn-based game I made with Dead End Studios. I was the only audio designer, building the SFX and music and implementing them in FMOD with Unity. I also helped with animation and with level design alongside the game designer.</p>
-          <div class="tags"><span class="tag">FMOD</span><span class="tag">Unity</span><span class="tag">Pro Tools</span><span class="tag">Animation</span><span class="tag">Level Design</span></div>
+      <div class="card feature" id="polynex">
+        <div class="feature-top">
+          <div class="media"><video controls preload="none" playsinline poster="polynex-demo.jpg" aria-label="Polynex game demo"><source src="polynex-demo.mp4" type="video/mp4"></video></div>
+          <div class="body">
+            <div class="role">Sole Audio Designer · Dead End Studios · 2023–2025</div>
+            <h3>Polynex: Realm of Champions</h3>
+            <p>A turn-based strategy game set in the world of Alterra, made with Dead End Studios. I was the only audio designer, building the SFX and music and implementing them in FMOD with Unity. I also helped with animation and with level design alongside the game designer.</p>
+            <div class="tags"><span class="tag">FMOD</span><span class="tag">Unity</span><span class="tag">Pro Tools</span><span class="tag">Animation</span><span class="tag">Level Design</span></div>
+            <div style="margin-top:8px">
+              <a class="btn" href="polynex-world-lore.pdf" target="_blank">World &amp; lore doc (PDF)</a>
+            </div>
+          </div>
+        </div>
+        <div class="gallery" data-gallery>
+          <div class="gallery-main">
+            <img src="polynex-battle.jpg" alt="In-game battle view">
+            <button class="gallery-btn prev" aria-label="Previous image">‹</button>
+            <button class="gallery-btn next" aria-label="Next image">›</button>
+          </div>
+          <div class="gallery-cap">In-game battle view</div>
+          <div class="thumbs">
+            <img src="polynex-battle.jpg" alt="In-game battle view" data-cap="In-game battle view" class="active" loading="lazy">
+            <img src="polynex-map-sketch.jpg" alt="World map, first design sketch" data-cap="World map, first design sketch" loading="lazy">
+            <img src="polynex-map-final.jpg" alt="World map, final design" data-cap="World map, final design" loading="lazy">
+            <img src="polynex-grunt.jpg" alt="Frontline Grunt: concept sketch to low-poly model" data-cap="Frontline Grunt: concept sketch to low-poly model" loading="lazy">
+            <img src="polynex-knights.jpg" alt="Low-poly knight lineup" data-cap="Low-poly knight lineup" loading="lazy">
+            <img src="polynex-knight-2.jpg" alt="Knight with shield and sword" data-cap="Knight with shield and sword" loading="lazy">
+            <img src="polynex-character.jpg" alt="Low-poly character model" data-cap="Low-poly character model" loading="lazy">
+          </div>
         </div>
       </div>
       <div class="card">
@@ -265,5 +325,22 @@
   <div class="wrap">© 2026 Roman Hage · Sound Design &amp; Animation</div>
 </footer>
 
+<script>
+document.querySelectorAll('[data-gallery]').forEach(g => {
+  const main = g.querySelector('.gallery-main img');
+  const cap = g.querySelector('.gallery-cap');
+  const thumbs = [...g.querySelectorAll('.thumbs img')];
+  let i = 0;
+  const show = n => {
+    i = (n + thumbs.length) % thumbs.length;
+    main.src = thumbs[i].src; main.alt = thumbs[i].alt; cap.textContent = thumbs[i].dataset.cap;
+    thumbs.forEach((t, k) => t.classList.toggle('active', k === i));
+    thumbs[i].scrollIntoView({block:'nearest', inline:'nearest'});
+  };
+  thumbs.forEach((t, k) => t.addEventListener('click', () => show(k)));
+  g.querySelector('.prev').addEventListener('click', () => show(i - 1));
+  g.querySelector('.next').addEventListener('click', () => show(i + 1));
+});
+</script>
 </body>
 </html>
