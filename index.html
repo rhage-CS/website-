@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roman Hage | Sound Design &amp; Animation</title>
 <meta name="description" content="Roman Hage: sound designer, game audio designer and animator.">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20200%20200%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23f2c230%22%20stroke-linecap%3D%22square%22%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%22110%22%20r%3D%2234%22%20stroke-width%3D%2214%22/%3E%3Cpath%20d%3D%22M162%20110%20A62%2062%200%200%201%20100%20172%22%20stroke-width%3D%2212%22/%3E%3Cpath%20d%3D%22M38%20110%20A62%2062%200%200%201%2064%2060%22%20stroke-width%3D%2212%22/%3E%3C/g%3E%3Cline%20x1%3D%2258%22%20y1%3D%2212%22%20x2%3D%22142%22%20y2%3D%22196%22%20stroke%3D%22%23f2c230%22%20stroke-width%3D%2216%22/%3E%3Cpolygon%20points%3D%2258%2C14%20150%2C26%20132%2C46%20152%2C66%2074%2C56%22%20fill%3D%22%23f2c230%22/%3E%3Cpolygon%20points%3D%2262%2C24%20146%2C34%20140%2C40%2066%2C31%22%20fill%3D%22%23141111%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Oswald:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -31,9 +31,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;tr
 
 /* nav */
 nav{position:sticky;top:0;z-index:10;background:#0c0a0a;border-bottom:3px solid var(--red)}
-nav .wrap{display:flex;justify-content:space-between;align-items:center;height:60px}
-.brand{display:flex;align-items:center;gap:10px;font:italic 600 1.25rem/1 var(--display);letter-spacing:.06em;color:var(--orange)}
-.brand-icon{width:30px;height:30px;background:var(--red);padding:2px}
+nav .wrap{display:flex;justify-content:center;align-items:center;height:60px}
 nav ul{list-style:none;display:flex;gap:22px;margin:0;padding:0}
 nav ul a{position:relative;display:inline-block;padding:4px 8px;margin:0 -8px;font:.85rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);transition:background .12s,color .12s}
 nav ul a::before,nav ul a::after{position:absolute;color:var(--red);opacity:0;transition:opacity .12s,transform .12s}
@@ -42,7 +40,7 @@ nav ul a::after{content:"]";right:-2px}
 nav ul a:hover{color:var(--text);background:rgba(212,32,47,.18)}
 nav ul a:hover::before{opacity:1;transform:translateX(-4px)}
 nav ul a:hover::after{opacity:1;transform:translateX(4px)}
-@media(max-width:700px){.brand{display:none}nav ul{gap:18px;overflow-x:auto;white-space:nowrap;width:100%;scrollbar-width:none}nav ul::-webkit-scrollbar{display:none}}
+@media(max-width:700px){nav ul{gap:18px;overflow-x:auto;white-space:nowrap;width:100%;scrollbar-width:none}nav ul::-webkit-scrollbar{display:none}}
 
 /* hero poster */
 .poster{position:relative;overflow:hidden;background:var(--red) radial-gradient(rgba(0,0,0,.18) 1px,transparent 1.4px) 0 0/6px 6px;color:var(--paper)}
@@ -172,7 +170,6 @@ section h2.glitch{position:relative}
 
 <nav>
   <div class="wrap">
-    <a class="brand" href="#top"><img src="favicon.svg" alt="" class="brand-icon">ROMAN HAGE</a>
     <ul>
       <li><a href="#top">Home</a></li>
       <li><a href="#sound">Sound Design</a></li>
@@ -306,7 +303,7 @@ section h2.glitch{position:relative}
     <div class="grid">
       <div class="card feature" id="polynex">
         <div class="feature-top">
-          <div class="media"><video controls preload="none" playsinline poster="polynex-demo.jpg" aria-label="Polynex game demo"><source src="polynex-demo.mp4" type="video/mp4"></video></div>
+          <div class="media"><video controls preload="metadata" playsinline aria-label="Polynex game demo"><source src="polynex-demo.mp4#t=0.5" type="video/mp4"></video></div>
           <div class="body">
             <div class="role">Game Audio Designer · Dead End Studios · 2023–2025</div>
             <h3>Polynex: Realm of Champions</h3>
