@@ -575,42 +575,115 @@ section h2.glitch{position:relative}
   // Data rain: short coded strings drifting down in loose columns. ~15 fps, a few dozen fillText calls per frame.
   const rc = document.getElementById('rain'), rx = rc.getContext('2d');
   const GLYPHS = ['1001010', 'x-00x0-Oo', '0110', '0x7F', '//SIG-04', '::01', 'O-o-0', 'x0x', '110100', 'RH-01', '00x0', '|||.|', 'Oo0', '0b1101', '>> 2A', 'x-x-0'];
-  const COL = 26, ROW = 14, drops = [];
-  let RW, RH;
+  // Structured data rain: clean redraw every frame (no smear).
+  // Columns on a fixed grid, characters swap and blink in and out, each stream has a faint delayed echo
+  // trailing off to one side, and small bursts of numbers flash in and out at random spots.
+  const COL = 22, ROW = 14;
+  let RW, RH, cols = [], lines = [], pops = [], field = [];
   const pick = () => GLYPHS[Math.random() * GLYPHS.length | 0];
-  // Horizontal "data lines": several glyphs joined with fixed separators, snapped to a grid
   const line = () => { const n = 3 + Math.random() * 5 | 0, sep = [' ', ' :: ', ' | ', ' -- '][Math.random() * 4 | 0]; return Array.from({ length: n }, pick).join(sep); };
-  function newDrop(anywhere) {
-    const kind = Math.random(), horiz = kind < .55, vert = !horiz && kind < .8;
-    const colStep = horiz ? COL * 4 : COL;      // horizontal lines start on a coarser grid so they stack in blocks
+  const chars = '0101xXoO0-:|';
+  const rch = () => chars[Math.random() * chars.length | 0];
+  const newStream = (i, anywhere) => ({
+    x: i * COL + 6, y: anywhere ? Math.random() * innerHeight : -Math.random() * 400,
+    v: [1, 1.5, 2, 3][Math.random() * 4 | 0], len: 6 + Math.random() * 14 | 0,
+    s: Array.from({ length: 24 }, rch), red: Math.random() < .5, a: .22 + Math.random() * .2,
+    side: Math.random() < .5 ? -1 : 1, echo: Math.random() < .55
+  });
+  const newLine = anywhere => ({
+    x: (Math.random() * Math.ceil(innerWidth / (COL * 6)) | 0) * COL * 6 + 6,
+    y: anywhere ? Math.random() * innerHeight : -20 - Math.random() * 300,
+    v: .5 + Math.random() * .7, t: line(), red: Math.random() < .5, a: .16 + Math.random() * .18, side: Math.random() < .5 ? -1 : 1
+  });
+  const newPop = () => {
+    const w = 3 + Math.random() * 6 | 0, h = 2 + Math.random() * 4 | 0;
+    return { x: (Math.random() * (innerWidth / COL) | 0) * COL + 6, y: (Math.random() * (innerHeight / ROW) | 0) * ROW,
+      g: Array.from({ length: w * h }, () => Math.random() < .7 ? rch() : ' '), w, life: 4 + Math.random() * 8 | 0, red: Math.random() < .5 };
+  };
+  // Background field: many glyphs at mixed sizes drifting slowly, each fading in, holding and fading out.
+  // About 1 in 12 is a "node"; nearby nodes are joined by thin lines.
+  const SIZES = [8, 9, 10, 11, 12, 14, 17, 22];
+  const newBit = anywhere => {
+    const big = Math.random();
     return {
-      x: (Math.random() * Math.ceil(innerWidth / colStep) | 0) * colStep + 6,
-      y: anywhere ? Math.random() * innerHeight : -20 - Math.random() * 300,
-      v: horiz ? .5 + Math.random() * .9 : .7 + Math.random() * 1.8,
-      t: horiz ? line() : pick(),
-      a: .14 + Math.random() * .24,
-      red: Math.random() < .55,
-      vert, horiz
+      x: Math.random() * innerWidth, y: Math.random() * innerHeight,
+      size: SIZES[big < .55 ? Math.random() * 3 | 0 : big < .9 ? 3 + Math.random() * 3 | 0 : 6 + Math.random() * 2 | 0],
+      t: Math.random() < .6 ? rch() : pick(), vy: .1 + Math.random() * .5,
+      a: .08 + Math.random() * .22, red: Math.random() < .45,
+      age: anywhere ? Math.random() * 200 : 0, span: 90 + Math.random() * 220 | 0, node: Math.random() < .08
     };
+  };
+  function drawField(burst) {
+    const nodes = [];
+    for (const b of field) {
+      b.age++; b.y += b.vy * (burst ? 3 : 1);
+      if (b.age > b.span || b.y > RH + 20) { Object.assign(b, newBit(false)); continue; }
+      const p = b.age / b.span, env = p < .2 ? p / .2 : p > .75 ? (1 - p) / .25 : 1;     // fade in, hold, fade out
+      const a = b.a * env * (burst ? 1.4 : 1);
+      if (a < .01) continue;
+      rx.font = b.size + 'px "Share Tech Mono", monospace';
+      rx.fillStyle = ink(b.red, a); rx.fillText(b.t, b.x, b.y);
+      if (b.node) nodes.push([b.x, b.y - b.size / 3, a]);
+    }
+    rx.lineWidth = 1;
+    for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i][0] - nodes[j][0], dy = nodes[i][1] - nodes[j][1], d = dx * dx + dy * dy;
+      if (d > 26000) continue;
+      rx.strokeStyle = `rgba(200,22,29,${Math.min(nodes[i][2], nodes[j][2]) * (1 - d / 26000) * .9})`;
+      rx.beginPath(); rx.moveTo(nodes[i][0], nodes[i][1]); rx.lineTo(nodes[j][0], nodes[j][1]); rx.stroke();
+    }
   }
   function sizeRain() {
     RW = rc.width = innerWidth; RH = rc.height = innerHeight;
-    const n = Math.min(420, Math.round(RW * RH / 4200));
-    drops.length = 0;
-    for (let i = 0; i < n; i++) drops.push(newDrop(true));
+    cols = Array.from({ length: Math.ceil(RW / COL) }, (_, i) => Math.random() < .85 ? newStream(i, true) : null);
+    lines = Array.from({ length: Math.round(RH / 18) }, () => newLine(true));
+    field = Array.from({ length: Math.min(700, Math.round(RW * RH / 2600)) }, () => newBit(true));
+    pops = [];
   }
+  const ink = (red, a) => red ? `rgba(200,22,29,${a})` : `rgba(233,223,204,${a})`;
   function rainFrame(burst) {
     rx.clearRect(0, 0, RW, RH);
+    drawField(burst);
     rx.font = '12px "Share Tech Mono", monospace';
-    for (const d of drops) {
-      d.y += d.v * (burst ? 3 : 1);
-      if (d.y > RH + 80) Object.assign(d, newDrop(false));
-      if (burst && Math.random() < .04) d.t = d.horiz ? line() : pick();
-      rx.fillStyle = d.red ? `rgba(212,32,47,${d.a * (burst ? 1.6 : 1)})` : `rgba(233,223,204,${d.a * (burst ? 1.3 : 1)})`;
-      const dx = burst && Math.random() < .3 ? (Math.random() - .5) * 24 : 0;
-      const y = d.horiz ? Math.round(d.y / ROW) * ROW : d.y;   // horizontal lines step row by row, like a terminal scroll
-      if (d.vert) { for (let k = 0; k < d.t.length; k++) rx.fillText(d.t[k], d.x + dx, y + k * 13); }
-      else rx.fillText(d.t, d.x + dx, y);
+    const k = burst ? 2.5 : 1;
+
+    for (let i = 0; i < cols.length; i++) {
+      const c = cols[i];
+      if (!c) { if (Math.random() < .004) cols[i] = newStream(i, false); continue; }
+      c.y += c.v * k;
+      if (Math.random() < .25) c.s[Math.random() * c.s.length | 0] = rch();        // characters swap in and out
+      const head = Math.round(c.y / ROW) * ROW, base = head / ROW | 0;
+      for (let j = 0; j < c.len; j++) {
+        const yy = head - j * ROW; if (yy < -ROW || yy > RH + ROW) continue;
+        if (Math.random() < .04) continue;                                          // random blink-out
+        const fade = 1 - j / c.len, ch = c.s[(j + base) % c.s.length];
+        rx.fillStyle = j === 0 ? `rgba(233,223,204,${Math.min(c.a * 1.8, .7)})` : ink(c.red, c.a * fade * (c.red ? 1 : .8));
+        rx.fillText(ch, c.x, yy);
+        // delayed side trail: same characters, offset sideways and lagging a few rows behind
+        if (c.echo && j < c.len * .6) { rx.fillStyle = ink(c.red, c.a * fade * .35); rx.fillText(ch, c.x + c.side * COL * .45, yy - ROW * 3); }
+      }
+      if (head - c.len * ROW > RH) cols[i] = Math.random() < .7 ? newStream(i, false) : null;
+    }
+
+    for (const l of lines) {
+      l.y += l.v * k;
+      if (l.y > RH + 40) Object.assign(l, newLine(false));
+      if (Math.random() < (burst ? .05 : .006)) l.t = line();
+      const y = Math.round(l.y / ROW) * ROW, dx = burst && Math.random() < .3 ? (Math.random() - .5) * 20 : 0;
+      rx.fillStyle = ink(l.red, l.a); rx.fillText(l.t, l.x + dx, y);
+      rx.fillStyle = ink(l.red, l.a * .3); rx.fillText(l.t, l.x + l.side * 10, y - ROW * 2);
+    }
+
+    // short bursts of numbers that flash in and out
+    if (Math.random() < (burst ? .6 : .18)) pops.push(newPop());
+    for (let i = pops.length - 1; i >= 0; i--) {
+      const p = pops[i];
+      if (--p.life < 0) { pops.splice(i, 1); continue; }
+      rx.fillStyle = ink(p.red, .28 + Math.random() * .2);
+      for (let n = 0; n < p.g.length; n++) {
+        if (p.g[n] === ' ' || Math.random() < .2) continue;
+        rx.fillText(Math.random() < .3 ? rch() : p.g[n], p.x + (n % p.w) * 8, p.y + (n / p.w | 0) * ROW);
+      }
     }
   }
   sizeRain(); rainFrame(false);
@@ -624,7 +697,7 @@ section h2.glitch{position:relative}
   function loop(t) {
     raf = requestAnimationFrame(loop);
     const inBurst = t < burstUntil;
-    if (t - lastRain > 66) { rainFrame(inBurst); lastRain = t; }
+    if (t - lastRain > 50) { rainFrame(inBurst); lastRain = t; }
     if (t - last < (inBurst ? 60 : 125)) return;
     last = t;
     if (t > next) {
