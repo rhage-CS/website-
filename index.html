@@ -23,11 +23,11 @@ h3{font-weight:600;text-transform:uppercase;letter-spacing:.02em;line-height:1.1
 .muted,.intro{color:var(--muted)}
 .intro{max-width:720px;margin:0 0 28px}
 
-/* background layers: one canvas + one static overlay (scanlines + vignette), no blend modes */
+/* background layers: two canvases + one static vignette overlay */
 #bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;image-rendering:pixelated;pointer-events:none}
 #rain{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;transform:translateZ(0);
-  background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px),radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.5))}
+  background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.5))}
 .tear{position:fixed;left:0;right:0;top:0;height:40px;z-index:98;pointer-events:none;background:rgba(212,32,47,.11);opacity:0;transform:translateZ(0)}
 
 /* nav */
@@ -407,7 +407,7 @@ section h2.glitch{position:relative}
   <div class="wrap">
     <div class="eyebrow">Game AI Research</div>
     <h2>Game AI Research</h2>
-    <p class="intro">I'm a Game AI Undergraduate Research Assistant in the Augmented Design Lab at UC Santa Cruz, led by Professor Jim Whitehead. I work on a 7-person team running design probes on how AI models can play games and act as NPCs. We present our progress every two weeks, and I help keep the team's tasks on track.</p>
+    <p class="intro">I'm a Game AI Undergraduate Research Assistant in the Augmented Design Lab at UC Santa Cruz, led by <a href="https://users.soe.ucsc.edu/~ejw/" target="_blank" rel="noopener">Professor Jim Whitehead</a>. I work on a 7-person team running design probes on how AI models can play games and act as NPCs. We present our progress every two weeks, and I help keep the team's tasks on track.</p>
     <div class="grid">
 
       <div class="card">
@@ -533,183 +533,243 @@ section h2.glitch{position:relative}
     g.querySelector('.next').addEventListener('click', () => show(i + 1));
   });
 
-  // Background: everything expensive is pre-rendered once, each frame is just a few image copies
+  // ===== Background =====
+  // Performance notes:
+  //  - Static base (glow + grid) is drawn once at 1/4 resolution; the bg canvas is only repainted during glitch bursts.
+  //  - Every glyph is pre-rendered once into a small sprite and stamped with drawImage + globalAlpha (much cheaper than fillText).
+  //  - No objects are created per frame; counts scale to the screen and drop automatically on slow devices.
+  //  - Everything stops while the tab is hidden.
   const c = document.getElementById('bg'), x = c.getContext('2d', { alpha: false });
-  const tear = document.querySelector('.tear'), S = 4;
-  const COLORS = ['212,32,47', '233,223,204', '51,224,255'];
-  let W, H, base, grain = [];
-  const mk = () => { const o = document.createElement('canvas'); o.width = W; o.height = H; return o; };
+  const tear = document.querySelector('.tear'), S = 4, COLORS = ['212,32,47', '233,223,204', '51,224,255'];
+  let W, H, base;
   function build() {
     W = Math.ceil(innerWidth / S); H = Math.ceil(innerHeight / S); c.width = W; c.height = H;
-    base = mk(); const b = base.getContext('2d');
-    const g = b.createRadialGradient(W / 2, 0, 0, W / 2, 0, H * 1.1);
+    base = document.createElement('canvas'); base.width = W; base.height = H;
+    const b = base.getContext('2d'), g = b.createRadialGradient(W / 2, 0, 0, W / 2, 0, H * 1.1);
     g.addColorStop(0, '#1c0808'); g.addColorStop(1, '#070505');
     b.fillStyle = g; b.fillRect(0, 0, W, H);
     b.fillStyle = 'rgba(212,32,47,.05)';
     for (let i = 0; i < W; i += 12) b.fillRect(i, 0, 1, H);
     for (let j = 0; j < H; j += 12) b.fillRect(0, j, W, 1);
-    grain = [0, 1, 2, 3].map(() => {             // 4 grain frames, made once with ImageData
-      const o = mk(), ox = o.getContext('2d'), d = ox.createImageData(W, H), p = d.data;
-      for (let k = 0; k < p.length; k += 4) if (Math.random() < .015) { p[k] = 233; p[k + 1] = 223; p[k + 2] = 204; p[k + 3] = Math.random() * 30; }
-      ox.putImageData(d, 0, 0); return o;
-    });
+    x.drawImage(base, 0, 0);
   }
-  let rT; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { build(); draw(0, false); }, 150); });
-  build();
-
   function glitch() {
+    x.drawImage(base, 0, 0);
     for (let n = 3 + Math.random() * 8 | 0; n--;) {
       const y = Math.random() * H | 0, h = 1 + Math.random() * H * .08 | 0, dx = (Math.random() - .5) * W * .35 | 0;
       x.drawImage(c, 0, y, W, h, dx, y, W, h);
       if (Math.random() < .6) { x.fillStyle = `rgba(${COLORS[Math.random() * 3 | 0]},${.08 + Math.random() * .26})`; x.fillRect(Math.random() * W * .5 | 0, y, W * .2 + Math.random() * W * .8 | 0, h); }
     }
-    for (let b = 0; b < 4; b++) if (Math.random() < .6) { x.fillStyle = `rgba(${COLORS[Math.random() * 2 | 0]},${.16 + Math.random() * .24})`; x.fillRect(Math.random() * W | 0, Math.random() * H | 0, 4 + Math.random() * 40 | 0, 1 + Math.random() * 8 | 0); }
-  }
-  let f = 0;
-  function draw(t, burst) {
-    x.drawImage(base, 0, 0);
-    x.drawImage(grain[f++ & 3], 0, 0);
-    if (burst) glitch();
+    for (let k = 0; k < 4; k++) if (Math.random() < .6) { x.fillStyle = `rgba(${COLORS[Math.random() * 2 | 0]},${.16 + Math.random() * .24})`; x.fillRect(Math.random() * W | 0, Math.random() * H | 0, 4 + Math.random() * 40 | 0, 1 + Math.random() * 8 | 0); }
   }
 
-  // Data rain: short coded strings drifting down in loose columns. ~15 fps, a few dozen fillText calls per frame.
+  // ----- data rain -----
   const rc = document.getElementById('rain'), rx = rc.getContext('2d');
   const GLYPHS = ['1001010', 'x-00x0-Oo', '0110', '0x7F', '//SIG-04', '::01', 'O-o-0', 'x0x', '110100', 'RH-01', '00x0', '|||.|', 'Oo0', '0b1101', '>> 2A', 'x-x-0'];
-  // Structured data rain: clean redraw every frame (no smear).
-  // Columns on a fixed grid, characters swap and blink in and out, each stream has a faint delayed echo
-  // trailing off to one side, and small bursts of numbers flash in and out at random spots.
-  const COL = 22, ROW = 14;
-  let RW, RH, cols = [], lines = [], pops = [], field = [];
-  const pick = () => GLYPHS[Math.random() * GLYPHS.length | 0];
-  const line = () => { const n = 3 + Math.random() * 5 | 0, sep = [' ', ' :: ', ' | ', ' -- '][Math.random() * 4 | 0]; return Array.from({ length: n }, pick).join(sep); };
-  const chars = '0101xXoO0-:|';
-  const rch = () => chars[Math.random() * chars.length | 0];
-  const newStream = (i, anywhere) => ({
-    x: i * COL + 6, y: anywhere ? Math.random() * innerHeight : -Math.random() * 400,
-    v: [1, 1.5, 2, 3][Math.random() * 4 | 0], len: 6 + Math.random() * 14 | 0,
-    s: Array.from({ length: 24 }, rch), red: Math.random() < .5, a: .22 + Math.random() * .2,
-    side: Math.random() < .5 ? -1 : 1, echo: Math.random() < .55
-  });
-  const newLine = anywhere => ({
-    x: (Math.random() * Math.ceil(innerWidth / (COL * 6)) | 0) * COL * 6 + 6,
-    y: anywhere ? Math.random() * innerHeight : -20 - Math.random() * 300,
-    v: .5 + Math.random() * .7, t: line(), red: Math.random() < .5, a: .16 + Math.random() * .18, side: Math.random() < .5 ? -1 : 1
-  });
-  const newPop = () => {
-    const w = 3 + Math.random() * 6 | 0, h = 2 + Math.random() * 4 | 0;
-    return { x: (Math.random() * (innerWidth / COL) | 0) * COL + 6, y: (Math.random() * (innerHeight / ROW) | 0) * ROW,
-      g: Array.from({ length: w * h }, () => Math.random() < .7 ? rch() : ' '), w, life: 4 + Math.random() * 8 | 0, red: Math.random() < .5 };
-  };
-  // Background field: many glyphs at mixed sizes drifting slowly, each fading in, holding and fading out.
-  // About 1 in 12 is a "node"; nearby nodes are joined by thin lines.
-  const SIZES = [8, 9, 10, 11, 12, 14, 17, 22];
-  const newBit = anywhere => {
-    const big = Math.random();
-    return {
-      x: Math.random() * innerWidth, y: Math.random() * innerHeight,
-      size: SIZES[big < .55 ? Math.random() * 3 | 0 : big < .9 ? 3 + Math.random() * 3 | 0 : 6 + Math.random() * 2 | 0],
-      t: Math.random() < .6 ? rch() : pick(), vy: .1 + Math.random() * .5,
-      a: .08 + Math.random() * .22, red: Math.random() < .45,
-      age: anywhere ? Math.random() * 200 : 0, span: 90 + Math.random() * 220 | 0, node: Math.random() < .08
-    };
-  };
-  function drawField(burst) {
-    const nodes = [];
-    for (const b of field) {
-      b.age++; b.y += b.vy * (burst ? 3 : 1);
-      if (b.age > b.span || b.y > RH + 20) { Object.assign(b, newBit(false)); continue; }
-      const p = b.age / b.span, env = p < .2 ? p / .2 : p > .75 ? (1 - p) / .25 : 1;     // fade in, hold, fade out
-      const a = b.a * env * (burst ? 1.4 : 1);
-      if (a < .01) continue;
-      rx.font = b.size + 'px "Share Tech Mono", monospace';
-      rx.fillStyle = ink(b.red, a); rx.fillText(b.t, b.x, b.y);
-      if (b.node) nodes.push([b.x, b.y - b.size / 3, a]);
+  const CHARS = '0101xXoO0-:|', SIZES = [6, 7, 8, 9, 10, 12, 14, 17, 21, 26, 32, 40];
+  const INK = ['rgb(200,22,29)', 'rgb(233,223,204)'];          // 0 = red, 1 = cream
+  const COL = 22, ROW = 14, FONT = '"Share Tech Mono", monospace';
+  const rnd = n => Math.random() * n | 0;
+  const pick = () => GLYPHS[rnd(GLYPHS.length)], rch = () => CHARS[rnd(CHARS.length)];
+  const line = () => { const n = 3 + rnd(5), sep = [' ', ' :: ', ' | ', ' -- '][rnd(4)]; let t = pick(); for (let i = 1; i < n; i++) t += sep + pick(); return t; };
+
+  // sprite cache: one tiny canvas per (text, size, colour); the set of texts is fixed, so memory stays bounded
+  const cache = new Map();
+  function sprite(t, size, col) {
+    const key = t + '|' + size + '|' + col; let sp = cache.get(key);
+    if (!sp) {
+      sp = document.createElement('canvas');
+      const g = sp.getContext('2d'); g.font = size + 'px ' + FONT;
+      sp.width = Math.ceil(g.measureText(t).width) + 2; sp.height = Math.ceil(size * 1.3);
+      g.font = size + 'px ' + FONT; g.textBaseline = 'top'; g.fillStyle = INK[col]; g.fillText(t, 1, 1);
+      cache.set(key, sp);
     }
-    rx.lineWidth = 1;
-    for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
-      const dx = nodes[i][0] - nodes[j][0], dy = nodes[i][1] - nodes[j][1], d = dx * dx + dy * dy;
-      if (d > 26000) continue;
-      rx.strokeStyle = `rgba(200,22,29,${Math.min(nodes[i][2], nodes[j][2]) * (1 - d / 26000) * .9})`;
-      rx.beginPath(); rx.moveTo(nodes[i][0], nodes[i][1]); rx.lineTo(nodes[j][0], nodes[j][1]); rx.stroke();
+    return sp;
+  }
+  const stamp = (sp, px, py, a) => { rx.globalAlpha = a; rx.drawImage(sp, px | 0, py | 0); };
+
+  let RW, RH, cols = [], lines = [], pops = [], field = [], micros = [], scale = 1;
+  const lowEnd = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4;
+  if (lowEnd) scale = .55;
+
+  const resetStream = (c, i, anywhere) => {
+    c.x = i * COL + 6; c.y = anywhere ? Math.random() * RH : -Math.random() * 400;
+    c.v = [1, 1.5, 2, 3][rnd(4)]; c.len = 6 + rnd(14); c.col = rnd(2) ? 0 : 1;
+    c.a = .22 + Math.random() * .2; c.side = Math.random() < .5 ? -1 : 1; c.echo = Math.random() < .55; c.on = true; c.stall = 0;
+    for (let k = 0; k < 24; k++) c.s[k] = rci();
+  };
+  const resetLine = (l, anywhere) => {
+    l.x = rnd(Math.ceil(RW / (COL * 6))) * COL * 6 + 6; l.y = anywhere ? Math.random() * RH : -20 - Math.random() * 300;
+    l.v = .5 + Math.random() * .7; l.col = rnd(2) ? 0 : 1; l.a = .16 + Math.random() * .18; l.side = Math.random() < .5 ? -1 : 1;
+    l.t = line(); l.sp = sprite(l.t, 12, l.col);
+  };
+  // Each background glyph has a depth z (0 = far, 1 = near) that sets its size, speed and brightness (parallax),
+  // plus a behaviour: drift, stutter (pause then jump), blink (cuts out and comes back), echo (delayed ghost copy) or crawl.
+  const MODES = ['drift', 'drift', 'stutter', 'blink', 'echo', 'crawl'];
+  const resetBit = (b, anywhere) => {
+    const z = Math.pow(Math.random(), 1.25);                   // more far than near, but plenty in the middle and front
+    b.z = z; b.x = Math.random() * RW; b.y = anywhere ? Math.random() * RH : -30 - Math.random() * 120;
+    b.size = SIZES[Math.min(SIZES.length - 1, z * SIZES.length | 0)];
+    b.t = Math.random() < (z > .7 ? .85 : .55) ? rch() : pick(); b.col = Math.random() < .45 ? 0 : 1;
+    b.sp = sprite(b.t, b.size, b.col);
+    b.vy = .05 + z * z * 1.6; b.a = .04 + z * .3;
+    b.mode = MODES[rnd(MODES.length)]; if (b.mode === 'crawl') b.vy *= .25;
+    b.age = anywhere ? rnd(200) : 0; b.span = 120 + rnd(260); b.node = z > .35 && Math.random() < .1;
+    b.delay = rnd(40);                                           // some wait before they start moving
+    b.hold = 0; b.blinkOn = true; b.blinkT = 5 + rnd(25); b.hist = b.y;
+  };
+  // Micro layer: tiny 5-7px strings, some stacked vertically, some running horizontally.
+  // A fixed pool of 80 pre-drawn sprites is reused, so the extra density costs almost nothing.
+  const microPool = [];
+  function buildMicro() {
+    microPool.length = 0;
+    for (let i = 0; i < 80; i++) {
+      const vert = i % 2 === 0, size = 5 + rnd(3), col = rnd(2) ? 0 : 1, sp = document.createElement('canvas'), g = sp.getContext('2d');
+      if (vert) {
+        const n = 4 + rnd(12); let t = ''; for (let k = 0; k < n; k++) t += rch();
+        sp.width = size + 2; sp.height = n * (size + 1) + 2;
+        g.font = size + 'px ' + FONT; g.textBaseline = 'top'; g.fillStyle = INK[col];
+        for (let k = 0; k < n; k++) g.fillText(t[k], 1, 1 + k * (size + 1));
+      } else {
+        const n = 2 + rnd(5), sep = [' ', ':', ' | ', '-'][rnd(4)]; let t = pick(); for (let k = 1; k < n; k++) t += sep + (rnd(2) ? pick() : rch());
+        g.font = size + 'px ' + FONT; sp.width = Math.ceil(g.measureText(t).width) + 2; sp.height = size + 3;
+        g.font = size + 'px ' + FONT; g.textBaseline = 'top'; g.fillStyle = INK[col]; g.fillText(t, 1, 1);
+      }
+      microPool.push(sp);
     }
   }
+  const resetMicro = (m, anywhere) => {
+    m.sp = microPool[rnd(microPool.length)]; m.x = Math.random() * RW; m.y = anywhere ? Math.random() * RH : -m.sp.height - Math.random() * 100;
+    m.vy = .05 + Math.random() * .35; m.a = .06 + Math.random() * .16; m.age = anywhere ? rnd(300) : 0; m.span = 160 + rnd(320);
+    m.blink = Math.random() < .25;
+  };
+  const POPS = 24;
+  const resetPop = p => {
+    p.w = 3 + rnd(6); p.h = 2 + rnd(4); p.x = rnd(RW / COL) * COL + 6; p.y = rnd(RH / ROW) * ROW;
+    p.life = 4 + rnd(8); p.col = rnd(2) ? 0 : 1;
+  };
+
   function sizeRain() {
     RW = rc.width = innerWidth; RH = rc.height = innerHeight;
-    cols = Array.from({ length: Math.ceil(RW / COL) }, (_, i) => Math.random() < .85 ? newStream(i, true) : null);
-    lines = Array.from({ length: Math.round(RH / 18) }, () => newLine(true));
-    field = Array.from({ length: Math.min(700, Math.round(RW * RH / 2600)) }, () => newBit(true));
-    pops = [];
+    const nc = Math.ceil(RW / COL);
+    cols = Array.from({ length: nc }, (_, i) => { const c = { s: new Array(24) }; resetStream(c, i, true); c.on = Math.random() < .85 * scale + .1; return c; });
+    lines = Array.from({ length: Math.round(RH / 18 * scale) }, () => { const l = {}; resetLine(l, true); return l; });
+    if (!microPool.length) buildMicro();
+    micros = Array.from({ length: Math.round(Math.min(700, RW * RH / 1800) * scale) }, () => { const m = {}; resetMicro(m, true); return m; });
+    field = Array.from({ length: Math.round(Math.min(1400, RW * RH / 1300) * scale) }, () => { const b = {}; resetBit(b, true); return b; });
+    pops = Array.from({ length: POPS }, () => ({ life: -1 }));
   }
-  const ink = (red, a) => red ? `rgba(200,22,29,${a})` : `rgba(233,223,204,${a})`;
+  // per-character sprites for the streams and pops, looked up by index (no string keys per frame)
+  const CH = [0, 1].map(col => [...CHARS].map(ch => sprite(ch, 12, col)));
+  const rci = () => rnd(CHARS.length);
+
+  const nodes = new Float32Array(3 * 80);
   function rainFrame(burst) {
     rx.clearRect(0, 0, RW, RH);
-    drawField(burst);
-    rx.font = '12px "Share Tech Mono", monospace';
     const k = burst ? 2.5 : 1;
 
+    // micro layer first (furthest back)
+    for (const m of micros) {
+      m.age++; m.y += m.vy * (burst ? 3 : 1);
+      if (m.age > m.span || m.y > RH + 10) { resetMicro(m, false); continue; }
+      if (m.blink && (m.age >> 3) % 3 === 0) continue;
+      const p = m.age / m.span, env = p < .15 ? p / .15 : p > .8 ? (1 - p) / .2 : 1;
+      stamp(m.sp, m.x, m.y, m.a * env);
+    }
+
+    // background field + node connections
+    let nn = 0;
+    for (const b of field) {
+      b.age++;
+      if (b.age > b.span || b.y > RH + 30) { resetBit(b, false); continue; }
+      if (b.delay > 0) b.delay--;
+      else if (b.mode === 'stutter') {
+        if (b.hold > 0) b.hold--; else { b.y += b.vy * 8 * (burst ? 2 : 1); b.hold = 6 + rnd(18); }
+      } else b.y += b.vy * (burst ? 3 : 1);
+      if (b.mode === 'blink' && --b.blinkT <= 0) { b.blinkOn = !b.blinkOn; b.blinkT = b.blinkOn ? 6 + rnd(30) : 2 + rnd(14); }
+      b.hist += (b.y - b.hist) * .08;                               // lagging position for the delayed echo
+      const p = b.age / b.span, env = p < .2 ? p / .2 : p > .75 ? (1 - p) / .25 : 1, a = b.a * env * (burst ? 1.3 : 1);
+      if (a < .01) continue;
+      if (b.mode === 'blink' && !b.blinkOn) continue;
+      stamp(b.sp, b.x, b.y - b.size, a);
+      if (b.mode === 'echo') stamp(b.sp, b.x + b.size * .4, b.hist - b.size - b.size * 1.6, a * .35);
+      if (b.node && nn < 80) { nodes[nn * 3] = b.x; nodes[nn * 3 + 1] = b.y - b.size / 2; nodes[nn * 3 + 2] = a; nn++; }
+    }
+    if (nn > 1) {
+      rx.globalAlpha = 1; rx.lineWidth = 1;
+      for (let i = 0; i < nn; i++) for (let j = i + 1; j < nn; j++) {
+        const dx = nodes[i * 3] - nodes[j * 3], dy = nodes[i * 3 + 1] - nodes[j * 3 + 1], d = dx * dx + dy * dy;
+        if (d > 26000) continue;
+        rx.globalAlpha = Math.min(nodes[i * 3 + 2], nodes[j * 3 + 2]) * (1 - d / 26000) * .9;
+        rx.strokeStyle = INK[0]; rx.beginPath(); rx.moveTo(nodes[i * 3], nodes[i * 3 + 1]); rx.lineTo(nodes[j * 3], nodes[j * 3 + 1]); rx.stroke();
+      }
+    }
+
+    // falling streams with delayed side echoes
     for (let i = 0; i < cols.length; i++) {
       const c = cols[i];
-      if (!c) { if (Math.random() < .004) cols[i] = newStream(i, false); continue; }
-      c.y += c.v * k;
-      if (Math.random() < .25) c.s[Math.random() * c.s.length | 0] = rch();        // characters swap in and out
-      const head = Math.round(c.y / ROW) * ROW, base = head / ROW | 0;
+      if (!c.on) { if (Math.random() < .004) resetStream(c, i, false); continue; }
+      if (c.stall > 0) c.stall--; else { c.y += c.v * k; if (Math.random() < .006) c.stall = 8 + rnd(30); }
+      if (Math.random() < .25) c.s[rnd(24)] = rci();
+      const head = Math.round(c.y / ROW) * ROW, base0 = head / ROW | 0;
       for (let j = 0; j < c.len; j++) {
         const yy = head - j * ROW; if (yy < -ROW || yy > RH + ROW) continue;
-        if (Math.random() < .04) continue;                                          // random blink-out
-        const fade = 1 - j / c.len, ch = c.s[(j + base) % c.s.length];
-        rx.fillStyle = j === 0 ? `rgba(233,223,204,${Math.min(c.a * 1.8, .7)})` : ink(c.red, c.a * fade * (c.red ? 1 : .8));
-        rx.fillText(ch, c.x, yy);
-        // delayed side trail: same characters, offset sideways and lagging a few rows behind
-        if (c.echo && j < c.len * .6) { rx.fillStyle = ink(c.red, c.a * fade * .35); rx.fillText(ch, c.x + c.side * COL * .45, yy - ROW * 3); }
+        if (Math.random() < .04) continue;
+        const fade = 1 - j / c.len, ch = c.s[((j + base0) % 24 + 24) % 24];
+        if (j === 0) stamp(CH[1][ch], c.x, yy - 12, Math.min(c.a * 1.8, .7));
+        else stamp(CH[c.col][ch], c.x, yy - 12, c.a * fade * (c.col ? .8 : 1));
+        if (c.echo && j < c.len * .6) stamp(CH[c.col][ch], c.x + c.side * COL * .45, yy - ROW * 3 - 12, c.a * fade * .35);
       }
-      if (head - c.len * ROW > RH) cols[i] = Math.random() < .7 ? newStream(i, false) : null;
+      if (head - c.len * ROW > RH) { if (Math.random() < .7) resetStream(c, i, false); else c.on = false; }
     }
 
+    // horizontal code lines (one cached sprite per line)
     for (const l of lines) {
       l.y += l.v * k;
-      if (l.y > RH + 40) Object.assign(l, newLine(false));
-      if (Math.random() < (burst ? .05 : .006)) l.t = line();
-      const y = Math.round(l.y / ROW) * ROW, dx = burst && Math.random() < .3 ? (Math.random() - .5) * 20 : 0;
-      rx.fillStyle = ink(l.red, l.a); rx.fillText(l.t, l.x + dx, y);
-      rx.fillStyle = ink(l.red, l.a * .3); rx.fillText(l.t, l.x + l.side * 10, y - ROW * 2);
+      if (l.y > RH + 40) resetLine(l, false);
+      else if (Math.random() < (burst ? .05 : .006)) { l.t = line(); l.sp = sprite(l.t, 12, l.col); }
+      const y = Math.round(l.y / ROW) * ROW - 12, dx = burst && Math.random() < .3 ? (Math.random() - .5) * 20 : 0;
+      stamp(l.sp, l.x + dx, y, l.a);
+      stamp(l.sp, l.x + l.side * 10, y - ROW * 2, l.a * .3);
     }
 
-    // short bursts of numbers that flash in and out
-    if (Math.random() < (burst ? .6 : .18)) pops.push(newPop());
-    for (let i = pops.length - 1; i >= 0; i--) {
-      const p = pops[i];
-      if (--p.life < 0) { pops.splice(i, 1); continue; }
-      rx.fillStyle = ink(p.red, .28 + Math.random() * .2);
-      for (let n = 0; n < p.g.length; n++) {
-        if (p.g[n] === ' ' || Math.random() < .2) continue;
-        rx.fillText(Math.random() < .3 ? rch() : p.g[n], p.x + (n % p.w) * 8, p.y + (n / p.w | 0) * ROW);
-      }
+    // short bursts of numbers (fixed pool, no allocation)
+    if (Math.random() < (burst ? .6 : .18)) { const p = pops.find(q => q.life < 0); if (p) resetPop(p); }
+    for (const p of pops) {
+      if (p.life < 0) continue;
+      p.life--;
+      const a = .28 + Math.random() * .2;
+      for (let n = 0; n < p.w * p.h; n++) if (Math.random() < .65) stamp(CH[p.col][rci()], p.x + (n % p.w) * 8, p.y + (n / p.w | 0) * ROW - 12, a);
     }
+    rx.globalAlpha = 1;
+    // the line sprites change over time: keep the cache from growing without limit
+    if (cache.size > 1400) { cache.clear(); for (const l of lines) l.sp = sprite(l.t, 12, l.col); for (const b of field) b.sp = sprite(b.t, b.size, b.col); }
   }
-  sizeRain(); rainFrame(false);
-  addEventListener('resize', () => { clearTimeout(rT2); rT2 = setTimeout(() => { sizeRain(); rainFrame(false); }, 150); });
-  var rT2;
-  draw(0, false);
+
+  build(); sizeRain(); rainFrame(false);
+  let rT; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { build(); sizeRain(); rainFrame(false); }, 150); });
   if (reduce) return;
 
-  // Idle: grain flickers ~8 fps. Bursts: ~16 fps for a fraction of a second, every 2–6 s. Stops when the tab is hidden.
-  let burstUntil = 0, blackout = 0, next = performance.now() + 1500, last = 0, lastRain = 0, raf;
+  // ----- loop: rain at ~20 fps, bg canvas only touched during bursts -----
+  let burstUntil = 0, next = performance.now() + 1500, lastRain = 0, lastBg = 0, wasBurst = false, raf;
+  let slow = 0, frames = 0;
   function loop(t) {
     raf = requestAnimationFrame(loop);
-    const inBurst = t < burstUntil;
-    if (t - lastRain > 50) { rainFrame(inBurst); lastRain = t; }
-    if (t - last < (inBurst ? 60 : 125)) return;
-    last = t;
     if (t > next) {
       burstUntil = t + 120 + Math.random() * 420;
-      if (Math.random() < .25) blackout = t + 60 + Math.random() * 90;
       next = t + 1800 + Math.random() * 4200;
       tear.style.transform = `translateY(${Math.random() * innerHeight}px) scaleY(${.1 + Math.random() * 1.4})`;
       tear.style.opacity = 1;
       setTimeout(() => tear.style.opacity = 0, 90 + Math.random() * 160);
     }
-    if (t < blackout) { x.fillStyle = 'rgba(0,0,0,.85)'; x.fillRect(0, 0, W, H); rx.clearRect(0, 0, RW, RH); return; }
-    draw(t, t < burstUntil);
+    const inBurst = t < burstUntil;
+    if (inBurst && t - lastBg > 60) { glitch(); lastBg = t; wasBurst = true; }
+    else if (!inBurst && wasBurst) { x.drawImage(base, 0, 0); wasBurst = false; }
+    if (t - lastRain > 50) {
+      const s0 = performance.now(); rainFrame(inBurst); lastRain = t;
+      // adaptive quality: if frames keep costing > 8 ms, thin the field once
+      if (frames < 120) { frames++; if (performance.now() - s0 > 8) slow++; if (frames === 120 && slow > 40 && scale > .5) { scale *= .6; sizeRain(); } }
+    }
   }
   raf = requestAnimationFrame(loop);
   document.addEventListener('visibilitychange', () => { cancelAnimationFrame(raf); if (!document.hidden) raf = requestAnimationFrame(loop); });
