@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Oswald:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0c0a0a;--card:#141010;--line:#3a1818;--text:#ece6da;--muted:#a89f92;--red:#c8161d;--cyan:#3fa9dc;--orange:#d8481e;--paper:#e9e3d6;--ink:#141111;--display:"Oswald","Arial Narrow",sans-serif;--mono:"Share Tech Mono",ui-monospace,monospace}
+:root{--bg:#0c0a0a;--card:#141010;--line:#3a1818;--text:#ece6da;--muted:#d2c9bb;--red:#c8161d;--cyan:#3fa9dc;--orange:#d8481e;--paper:#e9e3d6;--ink:#141111;--display:"Oswald","Arial Narrow",sans-serif;--mono:"Share Tech Mono",ui-monospace,monospace}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--bg)}
 body{margin:0;color:var(--text);font:1rem/1.6 "IBM Plex Sans",system-ui,sans-serif;counter-reset:sec}
@@ -34,9 +34,8 @@ h3{font-weight:600;text-transform:uppercase;letter-spacing:.02em;line-height:1.1
 /* background layers: two canvases + one static vignette overlay */
 #bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;image-rendering:pixelated;pointer-events:none}
 #rain{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;transform:translateZ(0);
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;transform:translateZ(0);
   background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.5))}
-.tear{position:fixed;left:0;right:0;top:0;height:40px;z-index:98;pointer-events:none;background:rgba(212,32,47,.11);opacity:0;transform:translateZ(0)}
 
 /* nav */
 nav{position:sticky;top:0;z-index:10;background:#0c0a0a;border-bottom:3px solid var(--red)}
@@ -62,7 +61,7 @@ nav ul a:hover::after{opacity:1;transform:translateX(4px)}
 .c{color:var(--paper)}
 .poster h1{position:relative;font-weight:700;font-size:clamp(2.8rem,7.5vw,5.6rem);line-height:.95;text-transform:uppercase;margin:0 0 22px}
 .poster h1 .accent{color:var(--ink)}
-.lead{font-size:1.08rem;max-width:620px}
+.lead{font-size:1.1rem;max-width:620px;color:#fff}
 .now{color:rgba(233,227,214,.82);font-size:.95rem;max-width:620px;border-left:3px solid var(--ink);padding-left:12px;margin-top:16px}
 .now strong{color:var(--paper)}
 .poster-bar{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 26px;padding:10px 20px;background:var(--ink);font:.75rem var(--mono);text-transform:uppercase;letter-spacing:.14em}
@@ -127,10 +126,10 @@ h3.sub{font-style:italic;color:var(--orange);letter-spacing:.06em;font-size:1.3r
 .media{aspect-ratio:16/9;background:#0a0606;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.85rem}
 .media img,.media video,.media iframe{width:100%;height:100%;object-fit:cover;border:0;background:#000}
 .body{padding:20px}
-.body p{color:var(--muted);font-size:.95rem;margin:8px 0}
+.body p{color:#f4efe6;font-size:.97rem;margin:8px 0}
 .card h3{font-size:1.55rem}
 .role{font:italic 600 .85rem var(--display);letter-spacing:.06em;color:var(--orange);text-transform:uppercase;margin-bottom:6px}
-.body .hook{color:var(--text);border-left:3px solid var(--red);padding-left:10px;margin:4px 0 10px}
+.body .hook{color:#fff;border-left:3px solid var(--red);padding-left:10px;margin:4px 0 10px}
 .credit{font-size:.82rem!important}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .tag{font:.7rem var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:3px 10px;border:1px solid #4a2a2a;color:var(--paper)}
@@ -201,31 +200,13 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
 .to-top{position:fixed;right:22px;bottom:22px;z-index:20;width:46px;height:46px;display:flex;align-items:center;justify-content:center;background:var(--red);color:#fff;font:700 1.3rem var(--mono);opacity:0;pointer-events:none;transition:opacity .25s}
 .to-top.show{opacity:1;pointer-events:auto}
 
-/* glitch: hero title loops, section titles play once on scroll-in */
-.glitch::before,.glitch::after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;pointer-events:none;opacity:0}
-.glitch::before{color:rgba(255,42,60,.75)}
-.glitch::after{color:rgba(51,224,255,.65)}
-section h2.glitch{position:relative}
-.poster h1.glitch{animation:g-shift 5s steps(1) infinite}
-.poster h1.glitch::before{animation:g-a 5s steps(1) infinite}
-.poster h1.glitch::after{animation:g-b 5s steps(1) infinite}
-.glitch.go{animation:g-shift-1 .45s steps(1)}
-.glitch.go::before{animation:g-a-1 .45s steps(1)}
-.glitch.go::after{animation:g-b-1 .45s steps(1)}
 @keyframes blink{50%{opacity:0}}
-@keyframes g-shift{0%,88%,93%,96%,100%{transform:none}89%{transform:translate(3px,-1px) skewX(-6deg)}91%{transform:translate(-3px,1px)}95%{transform:translate(2px,0) skewX(4deg)}}
-@keyframes g-a{0%,88%,97%,100%{opacity:0}89%{opacity:.9;clip-path:inset(0 0 62% 0);transform:translate(-6px)}91%{opacity:.9;clip-path:inset(30% 0 40% 0);transform:translate(5px)}93%{opacity:.9;clip-path:inset(70% 0 5% 0);transform:translate(-4px)}95%{opacity:.9;clip-path:inset(10% 0 75% 0);transform:translate(6px)}}
-@keyframes g-b{0%,88%,97%,100%{opacity:0}89%{opacity:.9;clip-path:inset(55% 0 10% 0);transform:translate(6px)}91%{opacity:.9;clip-path:inset(5% 0 70% 0);transform:translate(-5px)}93%{opacity:.9;clip-path:inset(40% 0 35% 0);transform:translate(4px)}95%{opacity:.9;clip-path:inset(80% 0 0 0);transform:translate(-6px)}}
-@keyframes g-shift-1{0%,60%,100%{transform:none}15%{transform:translate(2px,-1px) skewX(-8deg)}30%{transform:translate(-2px,1px)}45%{transform:translate(1px) skewX(5deg)}}
-@keyframes g-a-1{0%,70%,100%{opacity:0}10%{opacity:.85;clip-path:inset(0 0 60% 0);transform:translate(-4px)}30%{opacity:.85;clip-path:inset(45% 0 20% 0);transform:translate(4px)}50%{opacity:.85;clip-path:inset(75% 0 0 0);transform:translate(-3px)}}
-@keyframes g-b-1{0%,70%,100%{opacity:0}10%{opacity:.85;clip-path:inset(60% 0 0 0);transform:translate(4px)}30%{opacity:.85;clip-path:inset(10% 0 65% 0);transform:translate(-4px)}50%{opacity:.85;clip-path:inset(35% 0 40% 0);transform:translate(3px)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
 <body id="top">
 <canvas id="bg" aria-hidden="true"></canvas>
 <canvas id="rain" aria-hidden="true"></canvas>
-<div class="tear" aria-hidden="true"></div>
 
 <nav>
   <div class="wrap">
@@ -266,7 +247,7 @@ section h2.glitch{position:relative}
           <div class="snap-links">
             <a class="btn" href="mailto:r0manelha@gmail.com"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>Email</a>
             <a class="btn" href="https://www.linkedin.com/in/roman-hage" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a>
-            <a class="btn" href="RH_Resume.pdf?v=20261113" target="_blank"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 2v6h6M9 13h8M9 17h8" fill="none" stroke="currentColor" stroke-width="2"/></svg>Resume</a>
+            <a class="btn" href="RH_Resume.pdf?v=20261113" target="_blank"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 2v6h6M9 13h8M9 17h8" fill="none" stroke="currentColor" stroke-width="2"/></svg>Résumé</a>
           </div>
         </div>
       </div>
@@ -533,13 +514,13 @@ section h2.glitch{position:relative}
     <ul class="links">
       <li><a href="mailto:r0manelha@gmail.com"><span class="link-label"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>Email</span><span class="link-value">r0manelha@gmail.com</span></a></li>
       <li><a href="https://www.linkedin.com/in/roman-hage" target="_blank" rel="noopener"><span class="link-label"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</span><span class="link-value">linkedin.com/in/roman-hage</span></a></li>
-      <li><a href="RH_Resume.pdf?v=20261113" target="_blank"><span class="link-label"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 2v6h6M9 13h8M9 17h8" fill="none" stroke="currentColor" stroke-width="2"/></svg>Resume</span><span class="link-value">View PDF</span></a></li>
+      <li><a href="RH_Resume.pdf?v=20261113" target="_blank"><span class="link-label"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 2v6h6M9 13h8M9 17h8" fill="none" stroke="currentColor" stroke-width="2"/></svg>Résumé</span><span class="link-value">View PDF</span></a></li>
     </ul>
   </div>
 </section>
 
 <footer>
-  <div class="wrap"><span>© 2026 Roman Hage<span class="credits"> · Software logos via Simple Icons · Godot logo by Andrea Calabró, CC BY 4.0</span></span><span class="foot-icons"><a href="mailto:r0manelha@gmail.com" aria-label="Email"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="2"/></svg></a><a href="https://www.linkedin.com/in/roman-hage" target="_blank" rel="noopener" aria-label="LinkedIn"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a><a href="RH_Resume.pdf?v=20261113" target="_blank" aria-label="Resume"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 2v6h6M9 13h8M9 17h8" fill="none" stroke="currentColor" stroke-width="2"/></svg></a></span></div>
+  <div class="wrap"><span>© 2026 Roman Hage<span class="credits"> · Software logos via Simple Icons · Godot logo by Andrea Calabró, CC BY 4.0</span></span><span class="foot-icons"><a href="mailto:r0manelha@gmail.com" aria-label="Email"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="2"/></svg></a><a href="https://www.linkedin.com/in/roman-hage" target="_blank" rel="noopener" aria-label="LinkedIn"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a><a href="RH_Resume.pdf?v=20261113" target="_blank" aria-label="Résumé"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 2v6h6M9 13h8M9 17h8" fill="none" stroke="currentColor" stroke-width="2"/></svg></a></span></div>
 </footer>
 
 <a href="#top" class="to-top" aria-label="Back to top">↑</a>
@@ -548,22 +529,10 @@ section h2.glitch{position:relative}
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Glitch headings
-  const h1 = document.querySelector('.poster h1');
-  h1.dataset.text = h1.textContent; h1.classList.add('glitch');
-  h1.insertAdjacentHTML('beforeend', '<span class="cursor" aria-hidden="true">_</span>');
-  const heads = document.querySelectorAll('section h2');
-  heads.forEach(h => { h.dataset.text = h.textContent; h.classList.add('glitch'); });
+  // Blinking cursor after the headline
+  document.querySelector('.poster h1').insertAdjacentHTML('beforeend', '<span class="cursor" aria-hidden="true">_</span>');
 
   // Scroll-in effects, video pausing and back-to-top, all with observers (no scroll handlers doing layout)
-  if (!reduce) {
-    const once = new IntersectionObserver(es => es.forEach(e => {
-      if (!e.isIntersecting) return;
-      e.target.classList.add('go'); once.unobserve(e.target);
-      setTimeout(() => e.target.classList.remove('go'), 500);
-    }), { threshold: .6 });
-    heads.forEach(h => once.observe(h));
-  }
   const loopVid = document.querySelector('.mocap-media video');
   if (loopVid) new IntersectionObserver(([e]) => e.isIntersecting ? loopVid.play().catch(() => {}) : loopVid.pause()).observe(loopVid);
   const toTop = document.querySelector('.to-top');
@@ -586,12 +555,12 @@ section h2.glitch{position:relative}
 
   // ===== Background =====
   // Performance notes:
-  //  - Static base (glow + grid) is drawn once at 1/4 resolution; the bg canvas is only repainted during glitch bursts.
+  //  - Static base (glow + grid) is drawn once at 1/4 resolution; the bg canvas is never repainted after that.
   //  - Every glyph is pre-rendered once into a small sprite and stamped with drawImage + globalAlpha (much cheaper than fillText).
   //  - No objects are created per frame; counts scale to the screen and drop automatically on slow devices.
   //  - Everything stops while the tab is hidden.
   const c = document.getElementById('bg'), x = c.getContext('2d', { alpha: false });
-  const tear = document.querySelector('.tear'), S = 4, COLORS = ['212,32,47', '233,223,204', '51,224,255'];
+  const S = 4;
   let W, H, base;
   function build() {
     W = Math.ceil(innerWidth / S); H = Math.ceil(innerHeight / S); c.width = W; c.height = H;
@@ -604,21 +573,11 @@ section h2.glitch{position:relative}
     for (let j = 0; j < H; j += 12) b.fillRect(0, j, W, 1);
     x.drawImage(base, 0, 0);
   }
-  function glitch() {
-    x.drawImage(base, 0, 0);
-    for (let n = 3 + Math.random() * 8 | 0; n--;) {
-      const y = Math.random() * H | 0, h = 1 + Math.random() * H * .08 | 0, dx = (Math.random() - .5) * W * .35 | 0;
-      x.drawImage(c, 0, y, W, h, dx, y, W, h);
-      if (Math.random() < .6) { x.fillStyle = `rgba(${COLORS[Math.random() * 3 | 0]},${.08 + Math.random() * .26})`; x.fillRect(Math.random() * W * .5 | 0, y, W * .2 + Math.random() * W * .8 | 0, h); }
-    }
-    for (let k = 0; k < 4; k++) if (Math.random() < .6) { x.fillStyle = `rgba(${COLORS[Math.random() * 2 | 0]},${.16 + Math.random() * .24})`; x.fillRect(Math.random() * W | 0, Math.random() * H | 0, 4 + Math.random() * 40 | 0, 1 + Math.random() * 8 | 0); }
-  }
-
   // ----- data rain -----
   const rc = document.getElementById('rain'), rx = rc.getContext('2d');
   const GLYPHS = ['1001010', 'x-00x0-Oo', '0110', '0x7F', '//SIG-04', '::01', 'O-o-0', 'x0x', '110100', 'RH-01', '00x0', '|||.|', 'Oo0', '0b1101', '>> 2A', 'x-x-0'];
-  const CHARS = '0101xXoO0-:|', SIZES = [6, 7, 8, 9, 10, 12, 14, 17, 21, 26, 32, 40];
-  const INK = ['rgb(200,22,29)', 'rgb(233,223,204)'];          // 0 = red, 1 = cream
+  const CHARS = '0101xXoO0-:|', SIZES = [6, 7, 8, 9, 10, 12, 14, 16, 18, 21, 24, 28];
+  const INK = ['rgb(130,46,48)', 'rgb(150,143,132)'];   // muted red and grey, lower saturation          // 0 = red, 1 = cream
   const COL = 22, ROW = 14, FONT = '"Share Tech Mono", monospace';
   const rnd = n => Math.random() * n | 0;
   const pick = () => GLYPHS[rnd(GLYPHS.length)], rch = () => CHARS[rnd(CHARS.length)];
@@ -637,7 +596,8 @@ section h2.glitch{position:relative}
     }
     return sp;
   }
-  const stamp = (sp, px, py, a) => { rx.globalAlpha = a; rx.drawImage(sp, px | 0, py | 0); };
+  const DIM = .4;   // overall strength of the background numbers
+  const stamp = (sp, px, py, a) => { rx.globalAlpha = a * DIM; rx.drawImage(sp, px | 0, py | 0); };
 
   let RW, RH, cols = [], lines = [], pops = [], field = [], micros = [], scale = 1;
   const lowEnd = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4;
@@ -645,14 +605,14 @@ section h2.glitch{position:relative}
 
   const resetStream = (c, i, anywhere) => {
     c.x = i * COL + 6; c.y = anywhere ? Math.random() * RH : -Math.random() * 400;
-    c.v = [1, 1.5, 2, 3][rnd(4)]; c.len = 6 + rnd(14); c.col = rnd(2) ? 0 : 1;
+    c.v = [1, 1.5, 2, 3][rnd(4)]; c.len = 4 + rnd(7); c.col = rnd(2) ? 0 : 1;
     c.a = .22 + Math.random() * .2; c.side = Math.random() < .5 ? -1 : 1; c.echo = Math.random() < .55; c.on = true; c.stall = 0;
     for (let k = 0; k < 24; k++) c.s[k] = rci();
   };
   const resetLine = (l, anywhere) => {
     l.x = rnd(Math.ceil(RW / (COL * 6))) * COL * 6 + 6; l.y = anywhere ? Math.random() * RH : -20 - Math.random() * 300;
     l.v = .5 + Math.random() * .7; l.col = rnd(2) ? 0 : 1; l.a = .16 + Math.random() * .18; l.side = Math.random() < .5 ? -1 : 1;
-    l.t = line(); l.sp = sprite(l.t, 12, l.col);
+    l.t = line(); l.sp = sprite(l.t, 12, l.col); l.age = anywhere ? rnd(60) : 0; l.span = 50 + rnd(80);
   };
   // Each background glyph has a depth z (0 = far, 1 = near) that sets its size, speed and brightness (parallax),
   // plus a behaviour: drift, stutter (pause then jump), blink (cuts out and comes back), echo (delayed ghost copy) or crawl.
@@ -665,7 +625,7 @@ section h2.glitch{position:relative}
     b.sp = sprite(b.t, b.size, b.col);
     b.vy = .05 + z * z * 1.6; b.a = .04 + z * .3;
     b.mode = MODES[rnd(MODES.length)]; if (b.mode === 'crawl') b.vy *= .25;
-    b.age = anywhere ? rnd(200) : 0; b.span = 120 + rnd(260); b.node = z > .35 && Math.random() < .1;
+    b.age = anywhere ? rnd(60) : 0; b.span = 40 + rnd(70); b.node = z > .35 && Math.random() < .1;
     b.delay = rnd(40);                                           // some wait before they start moving
     b.hold = 0; b.blinkOn = true; b.blinkT = 5 + rnd(25); b.hist = b.y;
   };
@@ -691,7 +651,7 @@ section h2.glitch{position:relative}
   }
   const resetMicro = (m, anywhere) => {
     m.sp = microPool[rnd(microPool.length)]; m.x = Math.random() * RW; m.y = anywhere ? Math.random() * RH : -m.sp.height - Math.random() * 100;
-    m.vy = .05 + Math.random() * .35; m.a = .06 + Math.random() * .16; m.age = anywhere ? rnd(300) : 0; m.span = 160 + rnd(320);
+    m.vy = .05 + Math.random() * .35; m.a = .06 + Math.random() * .16; m.age = anywhere ? rnd(60) : 0; m.span = 40 + rnd(70);
     m.blink = Math.random() < .25;
   };
   const POPS = 24;
@@ -703,11 +663,11 @@ section h2.glitch{position:relative}
   function sizeRain() {
     RW = rc.width = innerWidth; RH = rc.height = innerHeight;
     const nc = Math.ceil(RW / COL);
-    cols = Array.from({ length: nc }, (_, i) => { const c = { s: new Array(24) }; resetStream(c, i, true); c.on = Math.random() < .85 * scale + .1; return c; });
-    lines = Array.from({ length: Math.round(RH / 18 * scale) }, () => { const l = {}; resetLine(l, true); return l; });
+    cols = Array.from({ length: nc }, (_, i) => { const c = { s: new Array(24) }; resetStream(c, i, true); c.on = Math.random() < .18 * scale; return c; });
+    lines = Array.from({ length: Math.round(RH / 75 * scale) }, () => { const l = {}; resetLine(l, true); return l; });
     if (!microPool.length) buildMicro();
-    micros = Array.from({ length: Math.round(Math.min(700, RW * RH / 1800) * scale) }, () => { const m = {}; resetMicro(m, true); return m; });
-    field = Array.from({ length: Math.round(Math.min(1400, RW * RH / 1300) * scale) }, () => { const b = {}; resetBit(b, true); return b; });
+    micros = Array.from({ length: Math.round(Math.min(110, RW * RH / 10000) * scale) }, () => { const m = {}; resetMicro(m, true); return m; });
+    field = Array.from({ length: Math.round(Math.min(220, RW * RH / 7000) * scale) }, () => { const b = {}; resetBit(b, true); return b; });
     pops = Array.from({ length: POPS }, () => ({ life: -1 }));
   }
   // per-character sprites for the streams and pops, looked up by index (no string keys per frame)
@@ -724,7 +684,7 @@ section h2.glitch{position:relative}
       m.age++; m.y += m.vy * (burst ? 3 : 1);
       if (m.age > m.span || m.y > RH + 10) { resetMicro(m, false); continue; }
       if (m.blink && (m.age >> 3) % 3 === 0) continue;
-      const p = m.age / m.span, env = p < .15 ? p / .15 : p > .8 ? (1 - p) / .2 : 1;
+      const p = m.age / m.span, env = p < .12 ? p / .12 : p > .35 ? (1 - p) / .65 : 1;
       stamp(m.sp, m.x, m.y, m.a * env);
     }
 
@@ -739,7 +699,7 @@ section h2.glitch{position:relative}
       } else b.y += b.vy * (burst ? 3 : 1);
       if (b.mode === 'blink' && --b.blinkT <= 0) { b.blinkOn = !b.blinkOn; b.blinkT = b.blinkOn ? 6 + rnd(30) : 2 + rnd(14); }
       b.hist += (b.y - b.hist) * .08;                               // lagging position for the delayed echo
-      const p = b.age / b.span, env = p < .2 ? p / .2 : p > .75 ? (1 - p) / .25 : 1, a = b.a * env * (burst ? 1.3 : 1);
+      const p = b.age / b.span, env = p < .12 ? p / .12 : p > .35 ? (1 - p) / .65 : 1, a = b.a * env * (burst ? 1.3 : 1);
       if (a < .01) continue;
       if (b.mode === 'blink' && !b.blinkOn) continue;
       stamp(b.sp, b.x, b.y - b.size, a);
@@ -759,14 +719,14 @@ section h2.glitch{position:relative}
     // falling streams with delayed side echoes
     for (let i = 0; i < cols.length; i++) {
       const c = cols[i];
-      if (!c.on) { if (Math.random() < .004) resetStream(c, i, false); continue; }
+      if (!c.on) { if (Math.random() < .001) resetStream(c, i, false); continue; }
       if (c.stall > 0) c.stall--; else { c.y += c.v * k; if (Math.random() < .006) c.stall = 8 + rnd(30); }
       if (Math.random() < .25) c.s[rnd(24)] = rci();
       const head = Math.round(c.y / ROW) * ROW, base0 = head / ROW | 0;
       for (let j = 0; j < c.len; j++) {
         const yy = head - j * ROW; if (yy < -ROW || yy > RH + ROW) continue;
         if (Math.random() < .04) continue;
-        const fade = 1 - j / c.len, ch = c.s[((j + base0) % 24 + 24) % 24];
+        const fade = Math.pow(1 - j / c.len, 2), ch = c.s[((j + base0) % 24 + 24) % 24];
         if (j === 0) stamp(CH[1][ch], c.x, yy - 12, Math.min(c.a * 1.8, .7));
         else stamp(CH[c.col][ch], c.x, yy - 12, c.a * fade * (c.col ? .8 : 1));
         if (c.echo && j < c.len * .6) stamp(CH[c.col][ch], c.x + c.side * COL * .45, yy - ROW * 3 - 12, c.a * fade * .35);
@@ -776,16 +736,17 @@ section h2.glitch{position:relative}
 
     // horizontal code lines (one cached sprite per line)
     for (const l of lines) {
-      l.y += l.v * k;
-      if (l.y > RH + 40) resetLine(l, false);
+      l.y += l.v * k; l.age++;
+      if (l.y > RH + 40 || l.age > l.span) { resetLine(l, false); continue; }
       else if (Math.random() < (burst ? .05 : .006)) { l.t = line(); l.sp = sprite(l.t, 12, l.col); }
       const y = Math.round(l.y / ROW) * ROW - 12, dx = burst && Math.random() < .3 ? (Math.random() - .5) * 20 : 0;
-      stamp(l.sp, l.x + dx, y, l.a);
-      stamp(l.sp, l.x + l.side * 10, y - ROW * 2, l.a * .3);
+      const lp = l.age / l.span, le = lp < .12 ? lp / .12 : lp > .35 ? (1 - lp) / .65 : 1;
+      stamp(l.sp, l.x + dx, y, l.a * le);
+      stamp(l.sp, l.x + l.side * 10, y - ROW * 2, l.a * .3 * le);
     }
 
-    // short bursts of numbers (fixed pool, no allocation)
-    if (Math.random() < (burst ? .6 : .18)) { const p = pops.find(q => q.life < 0); if (p) resetPop(p); }
+    // small clusters of numbers that flash in and out (fixed pool, no allocation)
+    if (Math.random() < .02) { const p = pops.find(q => q.life < 0); if (p) resetPop(p); }
     for (const p of pops) {
       if (p.life < 0) continue;
       p.life--;
@@ -801,26 +762,14 @@ section h2.glitch{position:relative}
   let rT; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { build(); sizeRain(); rainFrame(false); }, 150); });
   if (reduce) return;
 
-  // ----- loop: rain at ~20 fps, bg canvas only touched during bursts -----
-  let burstUntil = 0, next = performance.now() + 1500, lastRain = 0, lastBg = 0, wasBurst = false, raf;
-  let slow = 0, frames = 0;
+  // ----- loop: background numbers redraw at ~20 fps; stops while the tab is hidden -----
+  let lastRain = 0, raf, slow = 0, frames = 0;
   function loop(t) {
     raf = requestAnimationFrame(loop);
-    if (t > next) {
-      burstUntil = t + 120 + Math.random() * 420;
-      next = t + 1800 + Math.random() * 4200;
-      tear.style.transform = `translateY(${Math.random() * innerHeight}px) scaleY(${.1 + Math.random() * 1.4})`;
-      tear.style.opacity = 1;
-      setTimeout(() => tear.style.opacity = 0, 90 + Math.random() * 160);
-    }
-    const inBurst = t < burstUntil;
-    if (inBurst && t - lastBg > 60) { glitch(); lastBg = t; wasBurst = true; }
-    else if (!inBurst && wasBurst) { x.drawImage(base, 0, 0); wasBurst = false; }
-    if (t - lastRain > 50) {
-      const s0 = performance.now(); rainFrame(inBurst); lastRain = t;
-      // adaptive quality: if frames keep costing > 8 ms, thin the field once
-      if (frames < 120) { frames++; if (performance.now() - s0 > 8) slow++; if (frames === 120 && slow > 40 && scale > .5) { scale *= .6; sizeRain(); } }
-    }
+    if (t - lastRain < 50) return;
+    const s0 = performance.now(); rainFrame(false); lastRain = t;
+    // adaptive quality: if frames keep costing > 8 ms, thin the field once
+    if (frames < 120) { frames++; if (performance.now() - s0 > 8) slow++; if (frames === 120 && slow > 40 && scale > .5) { scale *= .6; sizeRain(); } }
   }
   raf = requestAnimationFrame(loop);
   document.addEventListener('visibilitychange', () => { cancelAnimationFrame(raf); if (!document.hidden) raf = requestAnimationFrame(loop); });
